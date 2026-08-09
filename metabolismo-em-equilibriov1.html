@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emagrecimento 30+ | Metabolismo em Equilíbrio</title>
+<meta name="description" content="Descubra estratégias inteligentes e baseadas em saúde hormonal para mulheres acima dos 30 recuperarem disposição e construírem hábitos saudáveis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E7;
+    --paper:#FFFDF8;
+    --ink:#2C2620;
+    --ink-soft:#5C5348;
+    --terracotta:#C1734E;
+    --terracotta-deep:#A85C3B;
+    --sage:#8B9A7C;
+    --sage-deep:#6E7D60;
+    --line:#E4DBC9;
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Manrope',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* Keyframes */
+  @keyframes fadeUp{ from{opacity:0;transform:translateY(26px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes floatY{ 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-14px) rotate(-1deg);} }
+  @keyframes drawCheck{ to{ stroke-dashoffset:0; } }
+  @keyframes softPop{ 0%{transform:scale(.9);opacity:0;} 100%{transform:scale(1);opacity:1;} }
+  @keyframes shine{ 0%{transform:translateX(-120%) skewX(-15deg);} 100%{transform:translateX(220%) skewX(-15deg);} }
+
+  /* Scroll-reveal */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+  .stagger.in-view > *{animation:fadeUp .7s cubic-bezier(.22,.61,.36,1) both;}
+  .stagger.in-view > *:nth-child(1){animation-delay:.05s;}
+  .stagger.in-view > *:nth-child(2){animation-delay:.15s;}
+  .stagger.in-view > *:nth-child(3){animation-delay:.25s;}
+  .stagger.in-view > *:nth-child(4){animation-delay:.35s;}
+  .stagger.in-view > *:nth-child(5){animation-delay:.45s;}
+  .stagger.in-view > *:nth-child(6){animation-delay:.55s;}
+  .stagger:not(.in-view) > *{opacity:0;}
+  img{max-width:100%;display:block;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;letter-spacing:-0.01em;color:var(--ink);}
+  a{text-decoration:none;color:inherit;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+  .eyebrow{
+    font-family:'Manrope',sans-serif;
+    font-weight:700;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--terracotta-deep);
+  }
+
+  /* Header */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(246,241,231,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease, box-shadow .3s ease;
+  }
+  header.scrolled{border-bottom-color:var(--line);box-shadow:0 6px 20px -14px rgba(44,38,32,.4);}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:76px;transition:height .3s ease;}
+  header.scrolled .wrap{height:64px;}
+  .logo{font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;opacity:0;animation:fadeUp .6s ease .1s forwards;}
+  .logo span{color:var(--terracotta);}
+  .btn{
+    position:relative;overflow:hidden;
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:14px 30px;
+    border-radius:999px;
+    font-weight:700;font-size:.95rem;
+    cursor:pointer;border:none;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn::after{
+    content:"";position:absolute;top:0;left:0;width:40%;height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent);
+    transform:translateX(-120%) skewX(-15deg);
+  }
+  .btn:hover::after{animation:shine .85s ease forwards;}
+  .btn-primary{background:var(--terracotta);color:#fff;box-shadow:0 8px 20px -8px rgba(193,115,78,.6);}
+  .btn-primary:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 14px 26px -8px rgba(193,115,78,.75);}
+  .btn-primary:active{transform:translateY(0) scale(.98);}
+  header .btn{padding:10px 22px;font-size:.85rem;opacity:0;animation:fadeUp .6s ease .2s forwards;}
+
+  /* Hero */
+  .hero{padding:76px 0 60px;}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;}
+  .hero .eyebrow{opacity:0;animation:fadeUp .7s cubic-bezier(.22,.61,.36,1) .1s forwards;}
+  .hero h1{font-size:clamp(2.1rem,4vw,3.1rem);line-height:1.12;margin:16px 0 20px;opacity:0;animation:fadeUp .7s cubic-bezier(.22,.61,.36,1) .22s forwards;}
+  .hero p{font-size:1.08rem;color:var(--ink-soft);max-width:46ch;margin-bottom:32px;opacity:0;animation:fadeUp .7s cubic-bezier(.22,.61,.36,1) .34s forwards;}
+  .hero > .wrap > div:first-child > .btn{opacity:0;animation:fadeUp .7s cubic-bezier(.22,.61,.36,1) .46s forwards;}
+  .hero-visual{position:relative;opacity:0;animation:fadeUp .8s cubic-bezier(.22,.61,.36,1) .3s forwards;}
+  .hero-visual::before{
+    content:"";position:absolute;inset:-24px;
+    background:radial-gradient(circle at 30% 20%, rgba(139,154,124,.28), transparent 60%),
+               radial-gradient(circle at 80% 80%, rgba(193,115,78,.22), transparent 55%);
+    border-radius:32px;z-index:0;
+  }
+  .hero-visual img{
+    position:relative;z-index:1;
+    border-radius:20px;
+    box-shadow:0 30px 60px -20px rgba(44,38,32,.35);
+    animation:floatY 6s ease-in-out 1.1s infinite;
+  }
+
+  /* Section shell */
+  section{padding:72px 0;}
+  .section-head{max-width:640px;margin:0 auto 44px;text-align:center;}
+  .section-head h2{font-size:clamp(1.6rem,3vw,2.15rem);margin-top:10px;}
+  .center{text-align:center;}
+
+  /* Problem grid */
+  .problem{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .problem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+  .p-card{padding:28px 22px;background:var(--cream);border-radius:var(--radius);border:1px solid var(--line);transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;}
+  .p-card:hover{transform:translateY(-6px);box-shadow:0 18px 34px -18px rgba(44,38,32,.28);border-color:var(--terracotta);}
+  .p-card .num{font-family:'Fraunces',serif;font-size:1.6rem;color:var(--terracotta);margin-bottom:10px;transition:transform .3s ease;}
+  .p-card:hover .num{transform:scale(1.15);}
+  .p-card h3{font-size:1.05rem;margin-bottom:8px;}
+  .p-card p{font-size:.92rem;color:var(--ink-soft);}
+
+  /* Solution */
+  .solution .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center;}
+  .solution img{border-radius:20px;box-shadow:0 24px 50px -18px rgba(44,38,32,.3);}
+  .solution h2{font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:16px;}
+  .solution > .wrap > div > p{color:var(--ink-soft);margin-bottom:22px;}
+  .check-list{list-style:none;margin-bottom:30px;}
+  .check-list li{display:flex;gap:12px;padding:9px 0;font-size:.98rem;}
+  .check-list .check-circle{flex-shrink:0;width:24px;height:24px;margin-top:1px;}
+  .check-list .check-circle circle{fill:rgba(139,154,124,.16);}
+  .check-list .check-circle path{
+    fill:none;stroke:var(--sage-deep);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:20;stroke-dashoffset:20;
+  }
+  .check-list.in-view .check-circle path{animation:drawCheck .5s ease forwards;}
+  .check-list.in-view li:nth-child(1) .check-circle path{animation-delay:.15s;}
+  .check-list.in-view li:nth-child(2) .check-circle path{animation-delay:.3s;}
+  .check-list.in-view li:nth-child(3) .check-circle path{animation-delay:.45s;}
+  .check-list.in-view li:nth-child(4) .check-circle path{animation-delay:.6s;}
+  .check-list.in-view li:nth-child(5) .check-circle path{animation-delay:.75s;}
+  .check-list li{opacity:0;transform:translateX(-10px);transition:opacity .5s ease, transform .5s ease;}
+  .check-list.in-view li{opacity:1;transform:translateX(0);}
+  .check-list.in-view li:nth-child(1){transition-delay:.05s;}
+  .check-list.in-view li:nth-child(2){transition-delay:.2s;}
+  .check-list.in-view li:nth-child(3){transition-delay:.35s;}
+  .check-list.in-view li:nth-child(4){transition-delay:.5s;}
+  .check-list.in-view li:nth-child(5){transition-delay:.65s;}
+
+  /* Benefits */
+  .benefits{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .b-card{padding:32px 26px;background:var(--cream);border-radius:var(--radius);border:1px solid var(--line);transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;}
+  .b-card:hover{transform:translateY(-6px);box-shadow:0 18px 34px -18px rgba(44,38,32,.28);border-color:var(--sage);}
+  .b-card .icon{font-size:1.7rem;margin-bottom:14px;display:inline-block;transition:transform .35s ease;}
+  .b-card:hover .icon{transform:scale(1.25) rotate(-6deg);}
+  .b-card h3{font-size:1.05rem;margin-bottom:8px;}
+  .b-card p{font-size:.92rem;color:var(--ink-soft);}
+
+  /* Bonus recipes */
+  .bonus{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .bonus-tag{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--sage);color:#fff;font-weight:700;font-size:.72rem;
+    padding:6px 14px;border-radius:999px;margin-bottom:14px;
+  }
+  .bonus-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px;}
+  .recipe-card{
+    background:var(--cream);border-radius:20px;border:1px solid var(--line);
+    overflow:hidden;position:relative;
+    transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .recipe-card:hover{transform:translateY(-6px);box-shadow:0 22px 42px -22px rgba(44,38,32,.32);border-color:var(--terracotta);}
+  .recipe-card .cover{
+    height:170px;position:relative;background:var(--paper);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .recipe-card .cover .blob{position:absolute;border-radius:50%;}
+  .recipe-card .cover .blob-a{width:92px;height:92px;background:var(--terracotta);left:38%;top:32%;transform:translate(-50%,-50%);}
+  .recipe-card .cover .blob-b{width:46px;height:46px;background:var(--sage);left:56%;top:62%;transform:translate(-50%,-50%);}
+  .recipe-card .cover .blob-c{width:36px;height:36px;background:#D9A07C;left:50%;top:20%;transform:translate(-50%,-50%);}
+  .recipe-card:hover .cover .blob{transition:transform .4s ease;}
+  .recipe-card:hover .cover .blob-a{transform:translate(-50%,-50%) scale(1.08);}
+  .recipe-card:hover .cover .blob-b{transform:translate(-50%,-50%) scale(1.15);}
+  .recipe-card .lock-badge{
+    position:absolute;top:14px;right:14px;z-index:2;
+    display:flex;align-items:center;gap:5px;
+    background:rgba(44,38,32,.78);color:#fff;
+    font-size:.68rem;font-weight:700;letter-spacing:.02em;
+    padding:6px 11px;border-radius:999px;
+  }
+  .recipe-card .lock-badge svg{width:11px;height:11px;}
+  .recipe-card .body{padding:20px 22px 24px;}
+  .recipe-card .eyebrow-mini{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-deep);margin-bottom:6px;display:block;}
+  .recipe-card h3{font-family:'Fraunces',serif;font-size:1.08rem;margin-bottom:6px;line-height:1.25;}
+  .recipe-card .desc{font-size:.86rem;color:var(--ink-soft);margin-bottom:14px;}
+  .macro-tags{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .macro-tag{font-size:.68rem;font-weight:700;background:var(--paper);border:1px solid var(--line);padding:4px 10px;border-radius:999px;color:var(--ink-soft);}
+  .price-row{display:flex;align-items:baseline;gap:10px;}
+  .price-old{text-decoration:line-through;color:var(--ink-soft);font-size:.86rem;}
+  .price-new{font-family:'Fraunces',serif;color:var(--sage-deep);font-weight:600;font-size:1.15rem;}
+  .bonus-note{
+    display:flex;align-items:center;gap:10px;justify-content:center;
+    margin-top:36px;color:var(--ink-soft);font-size:.88rem;
+  }
+  .bonus-note svg{width:15px;height:15px;flex-shrink:0;color:var(--terracotta-deep);}
+  .bonus-cta{text-align:center;margin-top:26px;}
+  /* Author */
+  .author .wrap{display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:center;}
+  .author img{width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid var(--paper);box-shadow:0 10px 26px -10px rgba(44,38,32,.35);transition:transform .35s ease;}
+  .author img:hover{transform:scale(1.06) rotate(-2deg);}
+  .author h2{font-size:1.4rem;margin-bottom:10px;}
+  .author p{color:var(--ink-soft);max-width:60ch;margin-bottom:18px;}
+
+  /* How it works */
+  .how{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:step;}
+  .h-card{padding:30px 24px;text-align:center;position:relative;}
+  .h-card .icon{
+    width:56px;height:56px;border-radius:50%;
+    background:var(--sage);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.4rem;margin:0 auto 16px;
+    transition:transform .35s ease, background .3s ease;
+  }
+  .h-card:hover .icon{transform:scale(1.12) rotate(8deg);background:var(--terracotta);}
+  .h-card h3{font-size:1rem;margin-bottom:8px;}
+  .h-card p{font-size:.9rem;color:var(--ink-soft);}
+
+  /* Final CTA */
+  .final-cta{
+    background:linear-gradient(135deg,var(--terracotta) 0%, var(--terracotta-deep) 100%);
+    color:#fff;text-align:center;border-radius:28px;
+    padding:64px 32px;margin:0 auto;max-width:1120px;
+  }
+  .final-cta h2{color:#fff;font-size:clamp(1.6rem,3vw,2.3rem);margin-bottom:16px;}
+  .final-cta p{color:rgba(255,255,255,.9);max-width:56ch;margin:0 auto 30px;}
+  .final-cta .btn-primary{background:#fff;color:var(--terracotta-deep);box-shadow:none;}
+  .final-cta .btn-primary:hover{transform:translateY(-2px);}
+
+  /* Footer */
+  footer{padding:48px 0 40px;text-align:center;color:var(--ink-soft);font-size:.86rem;}
+  footer p{margin-bottom:6px;}
+  footer .links a{color:var(--ink);font-weight:600;}
+  footer .links{margin-top:10px;}
+  footer .links span{margin:0 8px;color:var(--line);}
+
+  /* Modal */
+  .overlay{
+    position:fixed;inset:0;background:rgba(44,38,32,.55);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;z-index:100;
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity .3s ease, visibility .3s ease;
+  }
+  .overlay.open{opacity:1;visibility:visible;pointer-events:auto;}
+  .modal{
+    background:var(--paper);border-radius:20px;max-width:480px;width:100%;
+    padding:34px;position:relative;max-height:88vh;overflow-y:auto;
+    box-shadow:0 40px 80px -20px rgba(0,0,0,.4);
+    transform:scale(.92) translateY(14px);opacity:0;
+    transition:transform .32s cubic-bezier(.22,.61,.36,1), opacity .32s ease;
+  }
+  .overlay.open .modal{transform:scale(1) translateY(0);opacity:1;}
+  .modal .close{transition:transform .25s ease, background .25s ease;}
+  .modal .close:hover{transform:rotate(90deg);background:var(--terracotta);color:#fff;}
+  .modal.text-modal{max-width:600px;}
+  .modal .close{
+    position:absolute;top:18px;right:18px;
+    width:34px;height:34px;border-radius:50%;
+    background:var(--cream);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:1.1rem;color:var(--ink-soft);
+  }
+  .modal h2{font-size:1.3rem;margin-bottom:18px;}
+  .modal p{color:var(--ink-soft);font-size:.95rem;}
+  .checkout-product{display:flex;gap:16px;align-items:center;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--line);}
+  .checkout-product img{width:64px;height:64px;border-radius:10px;object-fit:cover;}
+  .checkout-product h3{font-size:1rem;margin-bottom:4px;}
+  .checkout-product .price{font-family:'Fraunces',serif;color:var(--terracotta-deep);font-size:1.3rem;margin-top:6px;}
+  .bonus-included{
+    display:flex;align-items:center;gap:9px;
+    background:#EEF0E7;color:var(--sage-deep);
+    font-size:.85rem;padding:11px 14px;border-radius:10px;
+    margin-bottom:20px;
+  }
+  .bonus-included svg{width:16px;height:16px;flex-shrink:0;}
+  .bonus-included strong{color:var(--sage-deep);}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:6px;color:var(--ink-soft);}
+  .field input{
+    width:100%;padding:13px 14px;border-radius:10px;
+    border:1px solid var(--line);background:var(--cream);
+    font-family:'Manrope',sans-serif;font-size:.95rem;
+  }
+  .field input:focus{outline:2px solid var(--sage);outline-offset:1px;}
+  .modal .btn-primary{width:100%;margin-top:8px;}
+  .secure-note{text-align:center;font-size:.78rem;color:var(--ink-soft);margin-top:14px;}
+
+  @media(max-width:860px){
+    .hero .wrap, .solution .wrap, .author .wrap{grid-template-columns:1fr;}
+    .hero-visual{order:-1;}
+    .problem-grid{grid-template-columns:repeat(2,1fr);}
+    .benefits-grid, .how-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:560px){
+    .problem-grid, .benefits-grid, .how-grid, .bonus-grid{grid-template-columns:1fr;}
+    header .btn{padding:9px 16px;font-size:.78rem;}
+    .final-cta{padding:44px 22px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001s !important;animation-delay:0s !important;transition-duration:.001s !important;scroll-behavior:auto !important;}
+    .reveal, .stagger > *, .check-list li, .hero *{opacity:1 !important;transform:none !important;}
+    .hero-visual img{animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">Emagrecimento <span>30+</span></div>
+    <button class="btn btn-primary" onclick="openCheckout()">Quero o E-book</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Guia para mulheres 30+</p>
+      <h1>Metabolismo em Equilíbrio</h1>
+      <p>Seu corpo mudou... mas isso não significa que você precisa aceitar isso. Descubra estratégias inteligentes para trabalhar a favor do seu corpo e recuperar sua disposição.</p>
+      <button class="btn btn-primary" onclick="openCheckout()">Quero Recuperar Minha Disposição!</button>
+    </div>
+    <div class="hero-visual">
+      <img src="https://hotmart.s3.amazonaws.com/product_pictures/e29c78a9-85e3-48b2-a4bd-39dcd8725b54/capa_produto_1000x1000.png" alt="Capa do e-book Metabolismo em Equilíbrio">
+    </div>
+  </div>
+</section>
+
+<section class="problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">O que está acontecendo</p>
+      <h2>Você sente que faz dieta, tenta se exercitar e, mesmo assim, o peso continua aumentando?</h2>
+    </div>
+    <div class="problem-grid stagger reveal">
+      <div class="p-card">
+        <div class="num">01</div>
+        <h3>Batalha Constante com o Peso</h3>
+        <p>A barriga parece surgir do nada, a energia desaparece e o espelho já não reflete a mulher que você sempre conheceu.</p>
+      </div>
+      <div class="p-card">
+        <div class="num">02</div>
+        <h3>Frustração e Desânimo</h3>
+        <p>Você sente que não importa o que faça, os resultados não chegam? A verdade é que não é falta de disciplina ou força de vontade.</p>
+      </div>
+      <div class="p-card">
+        <div class="num">03</div>
+        <h3>Impacto Hormonal</h3>
+        <p>Durante a perimenopausa e a menopausa, o organismo passa por mudanças hormonais profundas que alteram como o corpo funciona.</p>
+      </div>
+      <div class="p-card">
+        <div class="num">04</div>
+        <h3>Metabolismo Lento</h3>
+        <p>Essas mudanças alteram a forma como o corpo produz energia, armazena gordura e responde à alimentação, tornando o emagrecimento um desafio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="solution">
+  <div class="wrap">
+    <img class="reveal" src="https://hotmart.s3.amazonaws.com/product_pictures/e29c78a9-85e3-48b2-a4bd-39dcd8725b54/capa_produto_1000x1000.png" alt="Capa do e-book Metabolismo em Equilíbrio">
+    <div class="reveal">
+      <p class="eyebrow">A boa notícia</p>
+      <h2>Existe uma maneira inteligente de trabalhar a favor do seu corpo</h2>
+      <p>No e-book "Metabolismo em Equilíbrio", você vai descobrir estratégias simples, práticas e baseadas em conhecimento sobre saúde hormonal para recuperar sua disposição, entender como seu metabolismo funciona nessa fase da vida e construir hábitos que realmente fazem diferença.</p>
+      <ul class="check-list">
+        <li><svg class="check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span>Como as alterações hormonais impactam seu metabolismo.</span></li>
+        <li><svg class="check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span>Quais alimentos ajudam seu corpo a funcionar melhor.</span></li>
+        <li><svg class="check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span>Como organizar uma rotina que favorece o equilíbrio hormonal.</span></li>
+        <li><svg class="check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span>Estratégias de exercícios, sono e controle do estresse que potencializam seus resultados.</span></li>
+        <li><svg class="check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11"/><path d="M7 12.5l3.2 3.2L17 9"/></svg><span>Um protocolo prático de 21 dias para colocar tudo em ação.</span></li>
+      </ul>
+      <button class="btn btn-primary" onclick="openCheckout()">Sim! Eu Quero Transformar Meu Metabolismo!</button>
+    </div>
+  </div>
+</section>
+
+<section class="benefits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Resultados</p>
+      <h2>O que você vai conquistar com o "Metabolismo em Equilíbrio"</h2>
+    </div>
+    <div class="benefits-grid stagger reveal">
+      <div class="b-card"><span class="icon">✨</span><h3>Recupere Sua Confiança</h3><p>Sinta-se novamente conectada com seu corpo e radiante em sua própria pele.</p></div>
+      <div class="b-card"><span class="icon">🌿</span><h3>Saúde Hormonal Otimizada</h3><p>Estratégias baseadas em ciência para apoiar seu metabolismo durante esta fase da vida.</p></div>
+      <div class="b-card"><span class="icon">💪</span><h3>Mais Energia e Disposição</h3><p>Diga adeus à fadiga e viva seus dias com vitalidade renovada.</p></div>
+      <div class="b-card"><span class="icon">🍎</span><h3>Alimentação Consciente</h3><p>Aprenda a fazer escolhas inteligentes que nutrem seu corpo e mente.</p></div>
+      <div class="b-card"><span class="icon">🧘‍♀️</span><h3>Equilíbrio no Estresse e Sono</h3><p>Estratégias eficazes para gerenciar o estresse e melhorar a qualidade do seu sono.</p></div>
+      <div class="b-card"><span class="icon">🗓️</span><h3>Protocolo de 21 Dias</h3><p>Um plano prático e fácil de seguir para colocar tudo em ação e ver resultados.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bonus">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="bonus-tag">🎁 Bônus Exclusivo</span>
+      <h2>Duas receitas de chef, avaliadas em R$ 47, inclusas hoje sem custo</h2>
+      <p style="color:var(--ink-soft);margin-top:12px;">Pratos ricos em proteína, pensados para trabalhar a favor do seu metabolismo — no mesmo padrão de qualidade do e-book.</p>
+    </div>
+    <div class="bonus-grid stagger reveal">
+      <div class="recipe-card">
+        <div class="lock-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          Bônus
+        </div>
+        <div class="cover">
+          <span class="blob blob-c"></span>
+          <span class="blob blob-a"></span>
+          <span class="blob blob-b"></span>
+        </div>
+        <div class="body">
+          <span class="eyebrow-mini">Receita Bônus 01</span>
+          <h3>Salmão em Crosta de Ervas com Purê de Couve-Flor</h3>
+          <p class="desc">Um clássico das cozinhas nórdicas, pronto em 25 minutos.</p>
+          <div class="macro-tags">
+            <span class="macro-tag">38g proteína</span>
+            <span class="macro-tag">412 kcal</span>
+            <span class="macro-tag">25 min</span>
+          </div>
+          <div class="price-row">
+            <span class="price-old">R$ 27</span>
+            <span class="price-new">Grátis hoje</span>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="lock-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          Bônus
+        </div>
+        <div class="cover">
+          <span class="blob blob-c"></span>
+          <span class="blob blob-a"></span>
+          <span class="blob blob-b"></span>
+        </div>
+        <div class="body">
+          <span class="eyebrow-mini">Receita Bônus 02</span>
+          <h3>Filé ao Molho de Vinho Tinto com Aspargos Grelhados</h3>
+          <p class="desc">Inspirado nos bistrôs franceses, pronto em 30 minutos.</p>
+          <div class="macro-tags">
+            <span class="macro-tag">42g proteína</span>
+            <span class="macro-tag">438 kcal</span>
+            <span class="macro-tag">30 min</span>
+          </div>
+          <div class="price-row">
+            <span class="price-old">R$ 20</span>
+            <span class="price-new">Grátis hoje</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="bonus-note reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      Disponíveis apenas para quem garantir o e-book hoje.
+    </p>
+    <div class="bonus-cta">
+      <button class="btn btn-primary" onclick="openCheckout()">Quero o E-book + Receitas Bônus</button>
+    </div>
+  </div>
+</section>
+
+<section class="author">
+  <div class="wrap">
+    <img class="reveal" src="https://i.pravatar.cc/300?img=68" alt="Imagem do Autor John Wesley">
+    <div class="reveal">
+      <p class="eyebrow">Sobre o Autor</p>
+      <h2>John Wesley</h2>
+      <p>Este guia foi criado pelo especialista John Wesley, apaixonado por saúde e metabolismo. Com anos de experiência e um profundo conhecimento das mudanças hormonais, ele desenvolveu este método para empoderar mulheres a recuperarem o controle de seus corpos e vidas. Sua missão é desmistificar o emagrecimento após os 30, oferecendo estratégias reais e sustentáveis.</p>
+      <button class="btn btn-primary" onclick="openCheckout()">Conheça o E-book</button>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Processo</p>
+      <h2>Como Funciona a Sua Compra?</h2>
+    </div>
+    <div class="how-grid stagger reveal">
+      <div class="h-card"><div class="icon">🛒</div><h3>1. Escolha e Clique</h3><p>Inicie sua jornada! Clique em "Quero Meu E-book Agora!" ou em qualquer botão de compra da página.</p></div>
+      <div class="h-card"><div class="icon">✍️</div><h3>2. Preencha seus Dados</h3><p>Complete rapidamente seus dados no pop-up e prossiga para o ambiente seguro de pagamento (Cakto).</p></div>
+      <div class="h-card"><div class="icon">📧</div><h3>3. Acesso Imediato</h3><p>Após a confirmação do pagamento, você receberá o link de acesso ao e-book diretamente no seu e-mail.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="final-cta reveal">
+      <h2>Não lute mais contra seu metabolismo. Comece a trabalhar com ele.</h2>
+      <p>Este não é mais um método milagroso. É um guia para mulheres que desejam recuperar a confiança, a saúde e a qualidade de vida entendendo o próprio corpo e fazendo escolhas mais inteligentes todos os dias.</p>
+      <button class="btn btn-primary" onclick="openCheckout()">Quero Meu E-book Agora!</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Emagrecimento 30+. Todos os direitos reservados.</p>
+    <p>Desenvolvido com carinho para mulheres que buscam o equilíbrio.</p>
+    <div class="links">
+      <a href="#" onclick="openModal('privacy');return false;">Política de Privacidade</a>
+      <span>|</span>
+      <a href="#" onclick="openModal('terms');return false;">Termos de Serviço</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Checkout Modal -->
+<div class="overlay" id="checkout-overlay">
+  <div class="modal">
+    <div class="close" onclick="closeModal('checkout')">✕</div>
+    <h2>Finalizar Compra</h2>
+    <div class="checkout-product">
+      <img src="https://hotmart.s3.amazonaws.com/product_pictures/e29c78a9-85e3-48b2-a4bd-39dcd8725b54/capa_produto_1000x1000.png" alt="Capa do e-book">
+      <div>
+        <h3>E-book: Metabolismo em Equilíbrio</h3>
+        <p>Guia completo para mulheres 30+.</p>
+        <div class="price">R$ 97,00</div>
+      </div>
+    </div>
+    <div class="bonus-included">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      <span>+ 2 Receitas Bônus (Salmão &amp; Filé) — <strong>grátis</strong> nesta compra</span>
+    </div>
+    <div class="field">
+      <label for="fullname">Seu Nome Completo</label>
+      <input type="text" id="fullname" placeholder="Digite seu nome completo">
+    </div>
+    <div class="field">
+      <label for="email">Seu Melhor E-mail</label>
+      <input type="email" id="email" placeholder="voce@email.com">
+    </div>
+    <button class="btn btn-primary">Ir para o Pagamento Seguro (Cakto)</button>
+    <p class="secure-note">Ambiente de Pagamento Seguro via Cakto. Seus dados estão protegidos.</p>
+  </div>
+</div>
+
+<!-- Privacy Modal -->
+<div class="overlay" id="privacy-overlay">
+  <div class="modal text-modal">
+    <div class="close" onclick="closeModal('privacy')">✕</div>
+    <h2>Política de Privacidade</h2>
+    <p>Sua privacidade é nossa prioridade. Coletamos apenas as informações essenciais para processar sua compra e garantir o acesso ao seu e-book. Seus dados nunca são compartilhados com terceiros para fins de marketing sem seu consentimento explícito. Para mais detalhes, consulte nossa política completa.</p>
+  </div>
+</div>
+
+<!-- Terms Modal -->
+<div class="overlay" id="terms-overlay">
+  <div class="modal text-modal">
+    <div class="close" onclick="closeModal('terms')">✕</div>
+    <h2>Termos de Serviço</h2>
+    <p>Ao adquirir o e-book "Metabolismo em Equilíbrio", você concorda com nossos termos de serviço, que incluem as condições de uso do material, direitos autorais e políticas de reembolso. Nosso objetivo é oferecer um produto de alta qualidade para sua transformação.</p>
+  </div>
+</div>
+
+<script>
+  // Scroll reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+
+    var checklist = document.querySelector('.check-list');
+    if(checklist){
+      var checkIo = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            entry.target.classList.add('in-view');
+            checkIo.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      checkIo.observe(checklist);
+    }
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+    var cl = document.querySelector('.check-list');
+    if(cl){ cl.classList.add('in-view'); }
+  }
+
+  // Header shrink on scroll
+  var header = document.querySelector('header');
+  function onScroll(){
+    if(window.scrollY > 12){ header.classList.add('scrolled'); }
+    else{ header.classList.remove('scrolled'); }
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  function openCheckout(){ openModal('checkout'); }
+  function openModal(name){
+    document.getElementById(name + '-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(name){
+    document.getElementById(name + '-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.overlay').forEach(function(ov){
+    ov.addEventListener('click', function(e){
+      if(e.target === ov){
+        ov.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      document.querySelectorAll('.overlay.open').forEach(function(ov){
+        ov.classList.remove('open');
+      });
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+
+</body>
+</html>
