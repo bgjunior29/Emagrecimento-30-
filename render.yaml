@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: emagrecimento-30-api
+    runtime: node
+    buildCommand: npm install && npm run build && npm run db:push
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false
