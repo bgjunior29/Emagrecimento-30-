@@ -54,7 +54,10 @@ export default function LoginPage() {
       navigate(payload.user.profile ? "/app/dashboard" : "/onboarding");
     } catch (error) {
       setErrors({
-        form: error.message || "Não foi possível conectar ao servidor.",
+        form:
+          error.name === "TypeError"
+            ? "Não foi possível conectar à API. Confirme o deploy do Render e a variável VITE_API_URL na Vercel."
+            : error.message || "Não foi possível conectar ao servidor.",
       });
     } finally {
       setLoading(false);

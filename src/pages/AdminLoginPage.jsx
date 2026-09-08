@@ -35,7 +35,9 @@ export default function AdminLoginPage() {
       );
     } catch (requestError) {
       setError(
-        requestError.message || "Não foi possível conectar ao servidor.",
+        requestError.name === "TypeError"
+          ? "Não foi possível conectar à API. Confirme o deploy do Render e a variável VITE_API_URL na Vercel."
+          : requestError.message || "Não foi possível conectar ao servidor.",
       );
     } finally {
       setLoading(false);
