@@ -82,9 +82,9 @@ export default function RecipesPage() {
           {recipes.map((recipe) => (
             <div
               key={recipe.id}
-              className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm"
+              className="reveal-up lift-on-hover rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm"
             >
-              <div className="mb-4 h-36 rounded-[1.5rem] bg-gradient-to-br from-emerald-100 via-teal-100 to-amber-100" />
+              <div className="float-soft mb-4 h-36 rounded-[1.5rem] bg-gradient-to-br from-emerald-100 via-teal-100 to-amber-100" />
               <div className="mb-3 flex items-center justify-between">
                 <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold uppercase tracking-[0.12em] text-emerald-700">
                   {recipe.type}

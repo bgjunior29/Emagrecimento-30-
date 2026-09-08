@@ -38,7 +38,7 @@ export default function CheckInPage() {
 
   return (
     <AppShell pageTitle="Check-in diário">
-      <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="shine-sweep rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
         <div className="mb-6">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">
             Hoje
@@ -50,7 +50,7 @@ export default function CheckInPage() {
 
         <div className="space-y-6">
           {fields.map((field) => (
-            <div key={field}>
+            <div key={field} className="reveal-up">
               <div className="mb-2 flex items-center justify-between text-sm font-medium text-slate-700">
                 <span>{field}</span>
                 <span>

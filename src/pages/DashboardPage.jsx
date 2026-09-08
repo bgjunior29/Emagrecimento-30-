@@ -59,7 +59,7 @@ export default function DashboardPage() {
   return (
     <AppShell pageTitle="Dashboard">
       <div className="space-y-8">
-        <section className="rounded-[2rem] bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-white shadow-xl">
+        <section className="shine-sweep rounded-[2rem] bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-white shadow-xl">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-100">
             Olá, {profile.name}
           </p>
@@ -74,7 +74,7 @@ export default function DashboardPage() {
           {cards.map((card) => (
             <div
               key={card.label}
-              className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              className="reveal-up lift-on-hover rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm"
             >
               <p className="text-sm text-slate-500">{card.label}</p>
               <div className="mt-4 text-3xl font-black text-slate-900">
@@ -97,7 +97,7 @@ export default function DashboardPage() {
                   className="flex flex-1 flex-col items-center gap-2"
                 >
                   <div
-                    className="w-full rounded-t-2xl bg-gradient-to-t from-emerald-500 to-teal-400 transition-all duration-500"
+                    className="progress-grow w-full rounded-t-2xl bg-gradient-to-t from-emerald-500 to-teal-400"
                     style={{ height: `${value}%` }}
                   />
                   <span className="text-xs text-slate-500">
@@ -122,7 +122,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="h-2 rounded-full bg-slate-200">
                       <div
-                        className="h-2 rounded-full bg-emerald-500"
+                        className="progress-grow h-2 rounded-full bg-emerald-500"
                         style={{ width: "80%" }}
                       />
                     </div>

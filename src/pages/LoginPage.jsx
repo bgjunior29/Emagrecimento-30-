@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { demoCredentials } from "../data/mockData";
+import { useNavigate } from "react-router-dom";
+import { API_URL, CHECKOUT_URL } from "../config";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    email: demoCredentials.email,
-    password: demoCredentials.password,
-  });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -16,7 +14,7 @@ export default function LoginPage() {
     setErrors((current) => ({ ...current, [name]: "", form: "" }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const nextErrors = {};
@@ -34,36 +32,33 @@ export default function LoginPage() {
       return;
     }
 
-    const savedUser = JSON.parse(
-      localStorage.getItem("em30plus_user") || "null",
-    );
-    const validDemoLogin =
-      form.email.toLowerCase() === demoCredentials.email &&
-      form.password === demoCredentials.password;
-    const validSavedUser =
-      savedUser &&
-      savedUser.email === form.email.toLowerCase() &&
-      savedUser.password === form.password;
+    setLoading(true);
 
-    if (!validDemoLogin && !validSavedUser) {
-      setErrors({
-        form: "Credenciais inválidas. Use o acesso demo ou cadastre um perfil.",
+    try {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.email.toLowerCase(),
+          password: form.password,
+        }),
       });
-      return;
+      const payload = await response.json();
+
+      if (!response.ok) {
+        throw new Error(payload.error || "E-mail ou senha inválidos.");
+      }
+
+      localStorage.setItem("em30plus_token", payload.token);
+      localStorage.setItem("em30plus_user", JSON.stringify(payload.user));
+      navigate(payload.user.profile ? "/app/dashboard" : "/onboarding");
+    } catch (error) {
+      setErrors({
+        form: error.message || "Não foi possível conectar ao servidor.",
+      });
+    } finally {
+      setLoading(false);
     }
-
-    const userPayload = {
-      name: savedUser?.name || "Ana",
-      email: form.email.toLowerCase(),
-      password: form.password,
-    };
-
-    localStorage.setItem("em30plus_user", JSON.stringify(userPayload));
-
-    const onboarding = JSON.parse(
-      localStorage.getItem("em30plus_onboarding") || "null",
-    );
-    navigate(onboarding ? "/app/dashboard" : "/onboarding");
   };
 
   return (
@@ -104,7 +99,12 @@ export default function LoginPage() {
               <label className="text-sm font-medium text-slate-700">
                 Senha
               </label>
-              <a href="#" className="text-xs font-medium text-emerald-700">
+              <a
+                href={CHECKOUT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-medium text-emerald-700"
+              >
                 Esqueci a senha
               </a>
             </div>
@@ -131,32 +131,27 @@ export default function LoginPage() {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500"
           >
-            Entrar
+            {loading ? "Validando acesso..." : "Entrar"}
           </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              const prefill = {
-                email: demoCredentials.email,
-                password: demoCredentials.password,
-              };
-              setForm(prefill);
-              setErrors({});
-            }}
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
-          >
-            Usar demo de acesso
-          </button>
+          <p className="text-center text-xs text-slate-500">
+            Use o e-mail e a senha recebidos após a compra.
+          </p>
         </form>
 
         <div className="mt-6 text-center text-sm text-slate-600">
-          Ainda não tem conta?{" "}
-          <Link to="/onboarding" className="font-semibold text-emerald-700">
-            Criar conta
-          </Link>
+          Ainda não comprou o e-book?{" "}
+          <a
+            href={CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-emerald-700"
+          >
+            Comprar acesso na Cakto
+          </a>
         </div>
       </div>
     </div>

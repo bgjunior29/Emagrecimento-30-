@@ -36,8 +36,8 @@ app.use(
 );
 app.use(express.json({ limit: "1mb" }));
 
-function createToken(userId) {
-  return jwt.sign({ userId }, jwtSecret || "development-only-secret", {
+function createToken(userId, role = "user") {
+  return jwt.sign({ userId, role }, jwtSecret || "development-only-secret", {
     expiresIn: "7d",
   });
 }
@@ -50,10 +50,9 @@ function auth(req, res, next) {
     return res.status(401).json({ error: "Autenticacao necessaria." });
 
   try {
-    req.userId = jwt.verify(
-      token,
-      jwtSecret || "development-only-secret",
-    ).userId;
+    const payload = jwt.verify(token, jwtSecret || "development-only-secret");
+    req.userId = payload.userId;
+    req.role = payload.role || "user";
     return next();
   } catch {
     return res.status(401).json({ error: "Sessao invalida ou expirada." });
@@ -66,6 +65,7 @@ function publicUser(user) {
     name: user.name,
     email: user.email,
     profile: user.profile,
+    role: user.role || "user",
   };
 }
 
@@ -108,6 +108,25 @@ app.post("/api/auth/register", async (req, res) => {
 
 app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
+  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (
+    adminEmail &&
+    adminPassword &&
+    email?.toLowerCase() === adminEmail &&
+    password === adminPassword
+  ) {
+    return res.json({
+      token: createToken("admin", "admin"),
+      user: {
+        id: "admin",
+        name: "Administrador",
+        email: adminEmail,
+        role: "admin",
+      },
+    });
+  }
 
   const user = await prisma.user.findUnique({
     where: { email: email?.toLowerCase() },
@@ -118,6 +137,34 @@ app.post("/api/auth/login", async (req, res) => {
   }
 
   return res.json({ token: createToken(user.id), user: publicUser(user) });
+});
+
+app.post("/api/auth/admin-login", async (req, res) => {
+  const { email, password } = req.body;
+  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    return res
+      .status(503)
+      .json({ error: "Acesso admin ainda não configurado no servidor." });
+  }
+
+  if (email?.toLowerCase() !== adminEmail || password !== adminPassword) {
+    return res
+      .status(401)
+      .json({ error: "Credenciais administrativas inválidas." });
+  }
+
+  return res.json({
+    token: createToken("admin", "admin"),
+    user: {
+      id: "admin",
+      name: "Administrador",
+      email: adminEmail,
+      role: "admin",
+    },
+  });
 });
 
 app.get("/api/me", auth, async (req, res) => {

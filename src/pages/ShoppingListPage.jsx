@@ -143,7 +143,7 @@ export default function ShoppingListPage() {
             {list.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                className="reveal-up lift-on-hover flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-4"
               >
                 <div className="flex items-center gap-3">
                   <input
@@ -180,7 +180,7 @@ export default function ShoppingListPage() {
               {productsCatalog.map((product) => (
                 <div
                   key={product.id}
-                  className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4"
+                  className="reveal-up lift-on-hover rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4"
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-700">

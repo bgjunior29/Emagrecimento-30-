@@ -75,7 +75,7 @@ export default function MealPlanPage() {
   return (
     <AppShell pageTitle="Cardápio semanal">
       <div className="space-y-6">
-        <div className="flex items-center justify-between rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="shine-sweep rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
           <div>
             <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">
               Plano
@@ -97,7 +97,7 @@ export default function MealPlanPage() {
           {plan.map((day, dayIndex) => (
             <div
               key={day.day}
-              className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              className="reveal-up lift-on-hover rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm"
             >
               <div className="mb-4 flex items-center justify-between">
                 <h4 className="text-xl font-black text-slate-900">{day.day}</h4>
@@ -105,7 +105,10 @@ export default function MealPlanPage() {
 
               <div className="space-y-3 text-sm text-slate-600">
                 {Object.entries(day.meals).map(([mealKey, mealName]) => (
-                  <div key={mealKey} className="rounded-2xl bg-slate-50 p-3">
+                  <div
+                    key={mealKey}
+                    className="lift-on-hover rounded-2xl bg-slate-50 p-3"
+                  >
                     <div className="mb-1 flex items-center justify-between gap-2">
                       <strong className="text-slate-900">
                         {mealLabels[mealKey]}:

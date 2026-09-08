@@ -7,21 +7,22 @@ import {
   steps,
   testimonials,
 } from "../data/siteContent";
+import { CHECKOUT_URL } from "../config";
 
 const heroImage =
   "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=900&q=80";
 
 export default function LandingPage() {
   return (
-    <div className="bg-[#fffdf8] text-[#38271f]">
-      <header className="sticky top-0 z-40 border-b border-[#e7dccb] bg-[#fffdf8]/90 backdrop-blur-md">
+    <div className="landing-motion bg-[#fffefa] text-[#3f342c]">
+      <header className="sticky top-0 z-40 border-b border-[#e8dfd2] bg-[#fffefa]/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e4a82f] text-lg font-black text-[#38271f] shadow-sm">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d6a14a] text-lg font-black text-[#3f342c] shadow-sm">
               30+
             </div>
             <div>
-              <div className="text-sm font-black uppercase tracking-[0.16em] text-[#31523c]">
+              <div className="text-sm font-black uppercase tracking-[0.16em] text-[#49634d]">
                 Emagrecimento 30+
               </div>
             </div>
@@ -36,29 +37,31 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="rounded-full border border-[#e7dccb] px-4 py-2 text-sm font-bold text-[#705443] hover:bg-[#f8f1e5]"
+              className="rounded-full border border-[#e8dfd2] px-4 py-2 text-sm font-bold text-[#685748] hover:bg-[#f6f0e7]"
             >
-              Entrar
+              Já sou cliente
             </Link>
-            <Link
-              to="/app/dashboard"
-              className="rounded-full bg-[#31523c] px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-[#496b47]"
+            <a
+              href={CHECKOUT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full bg-[#49634d] px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-[#5b7958]"
             >
-              Acessar o app
-            </Link>
+              Comprar acesso
+            </a>
           </div>
         </div>
       </header>
 
       <main>
-        <section className="relative overflow-hidden bg-[#f8f1e5]">
+        <section className="relative overflow-hidden bg-[#f6f0e7]">
           <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-28">
             <div className="flex flex-col justify-center">
-              <span className="mb-4 inline-flex w-fit rounded-full border border-[#dfb454] bg-[#fff6d9] px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-[#8b5e20]">
+              <span className="pulse-soft mb-4 inline-flex w-fit rounded-full border border-[#dfb454] bg-[#fff6d9] px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-[#8b5e20]">
                 Saúde • Alimentação • Bem-estar
               </span>
 
-              <h1 className="max-w-xl text-4xl font-black tracking-tight text-[#38271f] sm:text-5xl lg:text-6xl">
+              <h1 className="max-w-xl text-4xl font-black tracking-tight text-[#3f342c] sm:text-5xl lg:text-6xl">
                 Emagrecimento 30+ com estratégia, rotina e acompanhamento real.
               </h1>
 
@@ -69,18 +72,20 @@ export default function LandingPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                <Link
-                  to="/app/dashboard"
-                  className="rounded-full bg-[#31523c] px-6 py-3 text-center text-sm font-bold text-white shadow-lg shadow-[#31523c]/20 transition hover:bg-[#496b47]"
-                >
-                  Acessar meu app
-                </Link>
                 <a
-                  href="#como-funciona"
-                  className="rounded-full border border-[#ddcdb7] bg-[#fffdf8] px-6 py-3 text-center text-sm font-bold text-[#705443] hover:bg-white"
+                  href={CHECKOUT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full bg-[#49634d] px-6 py-3 text-center text-sm font-bold text-white shadow-lg shadow-[#49634d]/20 transition hover:bg-[#5b7958]"
                 >
-                  Conhecer como funciona
+                  Quero começar agora
                 </a>
+                <Link
+                  to="/login"
+                  className="rounded-full border border-[#e1d6c8] bg-[#fffefa] px-6 py-3 text-center text-sm font-bold text-[#685748] hover:bg-white"
+                >
+                  Já tenho acesso
+                </Link>
               </div>
 
               <div className="mt-10 flex flex-wrap gap-8 text-sm text-slate-600">
@@ -109,13 +114,13 @@ export default function LandingPage() {
               <div className="absolute -left-8 top-10 h-40 w-40 rounded-full bg-emerald-200/60 blur-3xl" />
               <div className="absolute -right-8 bottom-10 h-44 w-44 rounded-full bg-amber-200/70 blur-3xl" />
 
-              <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-3 shadow-[0_30px_80px_-25px_rgba(15,23,42,0.25)]">
+              <div className="float-soft relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-3 shadow-[0_30px_80px_-25px_rgba(15,23,42,0.25)]">
                 <img
                   src={heroImage}
                   alt="Alimentação saudável e bem-estar"
                   className="h-[540px] w-full rounded-[1.5rem] object-cover"
                 />
-                <div className="absolute left-8 top-8 rounded-2xl bg-white/90 p-4 shadow-lg backdrop-blur-sm">
+                <div className="shine-sweep absolute left-8 top-8 rounded-2xl bg-white/90 p-4 shadow-lg backdrop-blur-sm">
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
                     Plano semanal
                   </p>
@@ -323,12 +328,14 @@ export default function LandingPage() {
               Crie seu perfil e comece a organizar sua rotina com mais clareza.
             </h2>
             <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-              <Link
-                to="/app/dashboard"
+              <a
+                href={CHECKOUT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-emerald-700 hover:bg-slate-100"
               >
-                Acessar o app
-              </Link>
+                Comprar acesso
+              </a>
               <Link
                 to="/login"
                 className="rounded-full border border-white/50 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
