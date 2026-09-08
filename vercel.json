@@ -1,4 +1,8 @@
 {
+  "framework": "vite",
+  "installCommand": "npm install --include=dev --ignore-scripts=false",
+  "buildCommand": "node ./node_modules/vite/bin/vite.js build",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/(.*)",
