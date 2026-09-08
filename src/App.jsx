@@ -430,7 +430,7 @@ function App() {
             <div className="overflow-hidden rounded-full border-4 border-paper bg-white shadow-soft transition duration-300 hover:scale-[1.02] hover:shadow-[0_30px_60px_-20px_rgba(44,38,32,0.35)]">
               <img
                 src="https://i.pravatar.cc/300?img=68"
-                alt="Imagem do Autor John Wesley"
+                alt="Imagem do Autor Derrick Wilians"
                 className="h-full w-full min-h-[260px] object-cover"
               />
             </div>
@@ -439,10 +439,10 @@ function App() {
                 Sobre o Autor
               </p>
               <h2 className="font-display text-3xl leading-tight text-ink sm:text-4xl">
-                John Wesley
+                Derrick Wilians, especialista em saúde e metabolismo, compartilha seu método para empoderar mulheres a recuperarem o controle de seus corpos e vidas.
               </h2>
               <p className="max-w-2xl text-base leading-8 text-inkSoft">
-                Este guia foi criado pelo especialista John Wesley, apaixonado
+                Este guia foi criado pelo especialista Derrick Wilians, apaixonado
                 por saúde e metabolismo. Com anos de experiência e um profundo
                 conhecimento das mudanças hormonais, ele desenvolveu este método
                 para empoderar mulheres a recuperarem o controle de seus corpos
