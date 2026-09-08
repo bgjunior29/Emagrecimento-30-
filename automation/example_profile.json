@@ -1,0 +1,9 @@
+{
+  "name": "Ana",
+  "age": 35,
+  "height_cm": 165,
+  "weight_kg": 72,
+  "goal": "Emagrecimento",
+  "activity": "Moderadamente ativo",
+  "preferences": ["frango", "vegetais", "frutas"]
+}
