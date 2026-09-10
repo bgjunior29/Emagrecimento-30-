@@ -55,7 +55,8 @@ O catálogo de receitas, favoritos e cardápios semanais fica no PostgreSQL. O
 arquivo `prisma/seed.js` contém apenas a carga inicial do catálogo; depois do
 seed, o painel administrativo passa a ser a fonte de manutenção das receitas.
 
-No Render, o `render.yaml` executa automaticamente:
+No Render, o `render.yaml` executa a preparação do banco no `preDeployCommand`,
+separada do build da aplicação:
 
 ```bash
 npm run db:push
