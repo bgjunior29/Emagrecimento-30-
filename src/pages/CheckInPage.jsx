@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AppShell } from "../components/Layout";
+import { API_URL } from "../config";
 
 const ratings = [1, 2, 3, 4, 5];
 
@@ -26,14 +27,40 @@ export default function CheckInPage() {
     }
   });
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const saveCheckIn = () => {
+  const saveCheckIn = async () => {
     if (Object.keys(values).length !== fields.length) return;
-    localStorage.setItem(
-      "em30plus_checkin",
-      JSON.stringify({ values, notes, date: new Date().toISOString() }),
-    );
-    setSaved(true);
+    setSaving(true);
+    try {
+      const response = await fetch(`${API_URL}/api/check-ins`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("em30plus_token")}`,
+        },
+        body: JSON.stringify({
+          energy: values.Energia,
+          sleep: values.Sono,
+          hunger: values.Fome,
+          mood: values.Humor,
+          disposition: values["Disposição"],
+          notes,
+        }),
+      });
+      const payload = await response.json();
+      if (!response.ok)
+        throw new Error(payload.error || "Não foi possível salvar o check-in.");
+      localStorage.setItem(
+        "em30plus_checkin",
+        JSON.stringify({ values, notes, date: payload.checkIn.date }),
+      );
+      setSaved(true);
+    } catch {
+      setSaved(false);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -94,9 +121,10 @@ export default function CheckInPage() {
           <button
             type="button"
             onClick={saveCheckIn}
+            disabled={saving}
             className="rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-500"
           >
-            Salvar check-in
+            {saving ? "Salvando..." : "Salvar check-in"}
           </button>
           {saved ? (
             <p className="text-sm font-medium text-emerald-700">

@@ -97,160 +97,142 @@ export const recipeCatalog = [
   },
 ];
 
-export const mealPlanWeek = [
-  {
-    day: "Segunda",
-    meals: {
-      breakfast: "Omelete com abacate",
-      lunch: "Wrap de frango e salada",
-      dinner: "Frango grelhado com quinoa",
-    },
+export const recipeDetails = {
+  1: {
+    ingredients: [
+      "Aveia em flocos",
+      "Iogurte natural",
+      "Banana",
+      "Morangos",
+      "Chia",
+    ],
+    steps: [
+      "Misture a aveia e o iogurte em uma tigela.",
+      "Cubra com a banana e os morangos fatiados.",
+      "Finalize com a chia e sirva.",
+    ],
   },
-  {
-    day: "Terça",
-    meals: {
-      breakfast: "Tigela de aveia com frutas",
-      lunch: "Salada de grão-de-bico",
-      dinner: "Peixe ao forno com legumes",
-    },
+  2: {
+    ingredients: [
+      "Grão-de-bico cozido",
+      "Tomate",
+      "Pepino",
+      "Cebola roxa",
+      "Azeite",
+      "Limão",
+    ],
+    steps: [
+      "Corte os vegetais em cubos pequenos.",
+      "Misture com o grão-de-bico em uma tigela.",
+      "Tempere com azeite, limão e ervas a gosto.",
+    ],
   },
-  {
-    day: "Quarta",
-    meals: {
-      breakfast: "Pão integral com ovos",
-      lunch: "Bowl de quinoa e legumes",
-      dinner: "Salmão com arroz integral",
-    },
+  3: {
+    ingredients: ["Peito de frango", "Quinoa", "Brócolis", "Alho", "Azeite"],
+    steps: [
+      "Tempere o frango com alho, sal e ervas.",
+      "Grelhe até ficar completamente cozido.",
+      "Sirva com quinoa cozida e brócolis no vapor.",
+    ],
   },
-  {
-    day: "Quinta",
-    meals: {
-      breakfast: "Omelete com abacate",
-      lunch: "Wrap de frango e salada",
-      dinner: "Peixe ao forno com legumes",
-    },
+  4: {
+    ingredients: ["Iogurte natural", "Granola", "Banana", "Canela"],
+    steps: [
+      "Coloque o iogurte em uma tigela.",
+      "Adicione a granola e a banana em rodelas.",
+      "Finalize com canela.",
+    ],
   },
-  {
-    day: "Sexta",
-    meals: {
-      breakfast: "Tigela de aveia com frutas",
-      lunch: "Bowl de quinoa e legumes",
-      dinner: "Frango grelhado com quinoa",
-    },
+  5: {
+    ingredients: ["Ovos", "Abacate", "Tomate", "Cebolinha", "Azeite"],
+    steps: [
+      "Bata os ovos e tempere.",
+      "Cozinhe em uma frigideira untada até firmar.",
+      "Sirva com abacate, tomate e cebolinha.",
+    ],
   },
-  {
-    day: "Sábado",
-    meals: {
-      breakfast: "Smoothie verde com banana",
-      lunch: "Salada de grão-de-bico",
-      dinner: "Salmão com arroz integral",
-    },
+  6: {
+    ingredients: [
+      "Tortilha integral",
+      "Frango desfiado",
+      "Alface",
+      "Tomate",
+      "Iogurte natural",
+    ],
+    steps: [
+      "Aqueça levemente a tortilha.",
+      "Recheie com frango, alface e tomate.",
+      "Adicione o iogurte, enrole e sirva.",
+    ],
   },
-  {
-    day: "Domingo",
-    meals: {
-      breakfast: "Pão integral com ovos",
-      lunch: "Wrap de frango e salada",
-      dinner: "Peixe ao forno com legumes",
-    },
+  7: {
+    ingredients: ["Filé de peixe", "Abobrinha", "Cenoura", "Limão", "Azeite"],
+    steps: [
+      "Tempere o peixe com limão, azeite e ervas.",
+      "Disponha com os legumes em uma assadeira.",
+      "Asse até o peixe ficar opaco e macio.",
+    ],
   },
-];
-
-export const defaultShoppingList = [
-  {
-    id: "tomate",
-    name: "Tomate",
-    qty: "8 unidades",
-    category: "Vegetais",
-    checked: true,
+  8: {
+    ingredients: [
+      "Banana",
+      "Couve",
+      "Leite ou bebida vegetal",
+      "Aveia",
+      "Gengibre",
+    ],
+    steps: [
+      "Lave a couve e corte a banana.",
+      "Bata todos os ingredientes até ficar cremoso.",
+      "Sirva imediatamente.",
+    ],
   },
-  {
-    id: "banana",
-    name: "Banana",
-    qty: "5 unidades",
-    category: "Frutas",
-    checked: false,
+  9: {
+    ingredients: ["Pão integral", "Ovos", "Tomate", "Folhas verdes"],
+    steps: [
+      "Prepare os ovos mexidos ou cozidos.",
+      "Toste o pão integral.",
+      "Monte com os ovos, tomate e folhas.",
+    ],
   },
-  {
-    id: "frango",
-    name: "Frango",
-    qty: "1 kg",
-    category: "Carnes",
-    checked: false,
+  10: {
+    ingredients: ["Quinoa", "Abobrinha", "Cenoura", "Grão-de-bico", "Azeite"],
+    steps: [
+      "Cozinhe a quinoa conforme a embalagem.",
+      "Refogue os legumes até ficarem macios.",
+      "Misture com o grão-de-bico e tempere.",
+    ],
   },
-  {
-    id: "arroz",
-    name: "Arroz integral",
-    qty: "2 pacotes",
-    category: "Grãos",
-    checked: false,
+  11: {
+    ingredients: [
+      "Filé de salmão",
+      "Arroz integral",
+      "Limão",
+      "Brócolis",
+      "Azeite",
+    ],
+    steps: [
+      "Tempere o salmão com limão, azeite e ervas.",
+      "Asse até ficar cozido no centro.",
+      "Sirva com arroz integral e brócolis.",
+    ],
   },
-  {
-    id: "iogurte",
-    name: "Iogurte natural",
-    qty: "4 potes",
-    category: "Laticínios",
-    checked: true,
+  12: {
+    ingredients: [
+      "Sementes de chia",
+      "Leite ou bebida vegetal",
+      "Banana",
+      "Frutas vermelhas",
+    ],
+    steps: [
+      "Misture a chia com o leite em um pote.",
+      "Leve à geladeira por pelo menos 2 horas.",
+      "Sirva com banana e frutas vermelhas.",
+    ],
   },
-  {
-    id: "quinoa",
-    name: "Quinoa",
-    qty: "1 pacote",
-    category: "Grãos",
-    checked: false,
-  },
-];
-
-export const productsCatalog = [
-  {
-    id: 1,
-    name: "Kit de refeições leve",
-    category: "Suplemento",
-    price: 79.9,
-    badge: "Popular",
-  },
-  {
-    id: 2,
-    name: "Shaker + whey protein",
-    category: "Proteína",
-    price: 129.9,
-    badge: "Top",
-  },
-  {
-    id: 3,
-    name: "Pack de vitaminas",
-    category: "Bem-estar",
-    price: 59.9,
-    badge: "Essencial",
-  },
-  {
-    id: 4,
-    name: "Lanche integral 30 dias",
-    category: "Alimentação",
-    price: 89.9,
-    badge: "Novo",
-  },
-];
+};
 
 export const demoCredentials = {
   email: "ana@emagrecimento30.com",
   password: "demo123",
 };
-
-export const adminStats = [
-  { label: "Usuários cadastrados", value: "1.284" },
-  { label: "Usuários ativos", value: "946" },
-  { label: "Check-ins", value: "8.920" },
-  { label: "Cardápios gerados", value: "2.410" },
-];
-
-export const notifications = [
-  { id: 1, title: "Lembrete de café da manhã", time: "07:30", status: "Ativo" },
-  { id: 2, title: "Check-in diário", time: "20:00", status: "Ativo" },
-  {
-    id: 3,
-    title: "Lista de compras",
-    time: "Segunda 18:00",
-    status: "Pendente",
-  },
-];

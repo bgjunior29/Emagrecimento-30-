@@ -1,22 +1,17 @@
 import { AppShell } from "../components/Layout";
-import { adminStats } from "../data/mockData";
 
 export default function AdminPage() {
   return (
     <AppShell pageTitle="Painel administrativo">
       <div className="space-y-6">
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {adminStats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm"
-            >
-              <p className="text-sm text-slate-500">{stat.label}</p>
-              <div className="mt-4 text-3xl font-black text-slate-900">
-                {stat.value}
-              </div>
-            </div>
-          ))}
+        <div className="rounded-[1.75rem] border border-dashed border-emerald-300 bg-emerald-50 p-6">
+          <h2 className="text-xl font-black text-slate-900">
+            Dados administrativos
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-600">
+            Os indicadores aparecerão quando usuários reais criarem contas,
+            completarem perfis e registrarem atividades.
+          </p>
         </div>
 
         <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">

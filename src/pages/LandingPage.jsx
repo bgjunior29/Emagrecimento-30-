@@ -122,16 +122,20 @@ export default function LandingPage() {
                 />
                 <div className="shine-sweep absolute left-8 top-8 rounded-2xl bg-white/90 p-4 shadow-lg backdrop-blur-sm">
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
-                    Plano semanal
+                    Sua rotina
                   </p>
-                  <p className="mt-2 text-2xl font-black text-slate-900">82%</p>
-                  <p className="text-sm text-slate-600">adesão ao plano</p>
+                  <p className="mt-2 text-2xl font-black text-slate-900">
+                    No seu ritmo
+                  </p>
+                  <p className="text-sm text-slate-600">
+                    com escolhas possíveis
+                  </p>
                 </div>
                 <div className="absolute bottom-8 right-8 rounded-2xl bg-slate-900 p-4 text-white shadow-xl">
                   <p className="text-xs uppercase tracking-[0.22em] text-slate-300">
-                    Check-in
+                    Acompanhamento
                   </p>
-                  <p className="mt-2 text-2xl font-black">Energia 4/5</p>
+                  <p className="mt-2 text-2xl font-black">Dia a dia</p>
                 </div>
               </div>
             </div>

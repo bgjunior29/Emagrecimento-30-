@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AppShell } from "../components/Layout";
-import { mealPlanWeek, recipeCatalog } from "../data/mockData";
+import { recipeCatalog } from "../data/mockData";
 
 const mealLabels = {
   breakfast: "Café da manhã",
@@ -9,15 +9,15 @@ const mealLabels = {
 };
 
 function getInitialPlan() {
-  if (typeof window === "undefined") return mealPlanWeek;
+  if (typeof window === "undefined") return [];
 
   try {
     const saved = JSON.parse(
       localStorage.getItem("em30plus_meal_plan") || "null",
     );
-    return saved || mealPlanWeek;
+    return saved || [];
   } catch {
-    return mealPlanWeek;
+    return [];
   }
 }
 
@@ -50,8 +50,18 @@ export default function MealPlanPage() {
   };
 
   const regeneratePlan = () => {
-    const randomized = mealPlanWeek.map((day) => ({
-      ...day,
+    const dayNames = [
+      "Domingo",
+      "Segunda",
+      "Terça",
+      "Quarta",
+      "Quinta",
+      "Sexta",
+      "Sábado",
+    ];
+    const today = new Date().getDay();
+    const randomized = Array.from({ length: 7 }, (_, index) => ({
+      day: dayNames[(today + index) % dayNames.length],
       meals: {
         breakfast:
           getAlternatives("breakfast")[
@@ -92,6 +102,18 @@ export default function MealPlanPage() {
             Gerar novo cardápio
           </button>
         </div>
+
+        {plan.length === 0 ? (
+          <div className="rounded-[2rem] border border-dashed border-emerald-300 bg-emerald-50 p-8 text-center">
+            <h3 className="text-xl font-black text-slate-900">
+              Seu cardápio começa com você
+            </h3>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
+              Ainda não há refeições definidas. Gere uma sugestão para a sua
+              semana e troque qualquer opção que não combine com sua rotina.
+            </p>
+          </div>
+        ) : null}
 
         <div className="grid gap-5 xl:grid-cols-2">
           {plan.map((day, dayIndex) => (

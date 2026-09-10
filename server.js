@@ -144,11 +144,23 @@ app.post("/api/auth/login", async (req, res) => {
   }
 
   if (email?.toLowerCase() === demoEmail && password === demoPassword) {
+    let demoUser = await prisma.user.findUnique({
+      where: { email: demoEmail },
+    });
+    if (!demoUser) {
+      demoUser = await prisma.user.create({
+        data: {
+          name: "Usuário demo",
+          email: demoEmail,
+          passwordHash: await bcrypt.hash(demoPassword, 12),
+        },
+      });
+    }
     return res.json({
-      token: createToken("demo-user"),
+      token: createToken(demoUser.id),
       user: {
-        id: "demo-user",
-        name: "Ana",
+        id: demoUser.id,
+        name: demoUser.name,
         email: demoEmail,
         role: "user",
       },

@@ -48,11 +48,33 @@ function getProfile() {
 
 export default function DashboardPage() {
   const profile = getProfile();
+  const hasOnboarding = Boolean(localStorage.getItem("em30plus_onboarding"));
+  const checkIn = JSON.parse(
+    localStorage.getItem("em30plus_checkin") || "null",
+  );
+  const checkInValues = checkIn?.values || {};
+  const ratingFields = ["Energia", "Sono", "Fome", "Humor", "Disposição"];
   const cards = [
-    { label: "Refeições planejadas", value: "21", detail: "Semana" },
-    { label: "Refeições concluídas", value: "14", detail: "67%" },
-    { label: "Água consumida", value: "1.8L", detail: "Meta 2.5L" },
-    { label: "Nível de energia", value: "4/5", detail: profile.activity },
+    {
+      label: "Refeições planejadas",
+      value: hasOnboarding ? "Ainda não definido" : "Comece pelo perfil",
+      detail: hasOnboarding ? "Monte seu primeiro dia" : "Primeiro passo",
+    },
+    {
+      label: "Refeições registradas",
+      value: "Nenhuma",
+      detail: "Registre quando começar",
+    },
+    {
+      label: "Check-in de hoje",
+      value: `${Object.keys(checkInValues).length}/${ratingFields.length}`,
+      detail: "Avaliações preenchidas",
+    },
+    {
+      label: "Seu objetivo",
+      value: hasOnboarding ? profile.goal : "Não definido",
+      detail: hasOnboarding ? profile.activity : "Complete seu perfil",
+    },
   ];
 
   return (
@@ -64,8 +86,9 @@ export default function DashboardPage() {
           </p>
           <h2 className="mt-3 text-3xl font-black">Resumo do dia</h2>
           <p className="mt-3 max-w-xl text-emerald-50">
-            Seu plano está ajustado para {profile.goal.toLowerCase()} e sua
-            rotina foi estruturada para manter consistência, energia e controle.
+            {hasOnboarding
+              ? "Seu espaço está pronto para você construir uma rotina alimentar que faça sentido para a sua vida."
+              : "Comece preenchendo seu perfil. Depois você poderá montar seu cardápio e acompanhar sua rotina sem dados pré-preenchidos."}
           </p>
         </section>
 
@@ -86,25 +109,10 @@ export default function DashboardPage() {
 
         <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="text-xl font-bold text-slate-900">
-              Progresso semanal
-            </h3>
-            <div className="mt-6 flex h-40 items-end gap-3">
-              {[45, 72, 56, 88, 80, 94, 76].map((value, index) => (
-                <div
-                  key={index}
-                  className="flex flex-1 flex-col items-center gap-2"
-                >
-                  <div
-                    className="progress-grow w-full rounded-t-2xl bg-gradient-to-t from-emerald-500 to-teal-400"
-                    style={{ height: `${value}%` }}
-                  />
-                  <span className="text-xs text-slate-500">
-                    {["S", "T", "Q", "Q", "S", "S", "D"][index]}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <h3 className="text-xl font-bold text-slate-900">Seu histórico</h3>
+            <p className="mt-3 text-sm leading-6 text-slate-500">
+              Conforme você fizer registros, seu histórico aparecerá aqui.
+            </p>
           </div>
 
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
@@ -112,22 +120,26 @@ export default function DashboardPage() {
               Check-in rápido
             </h3>
             <div className="mt-5 space-y-4">
-              {["Energia", "Sono", "Fome", "Humor", "Disposição"].map(
-                (item) => (
-                  <div key={item}>
-                    <div className="mb-2 flex items-center justify-between text-sm text-slate-600">
-                      <span>{item}</span>
-                      <span>4/5</span>
-                    </div>
-                    <div className="h-2 rounded-full bg-slate-200">
+              {ratingFields.map((item) => (
+                <div key={item}>
+                  <div className="mb-2 flex items-center justify-between text-sm text-slate-600">
+                    <span>{item}</span>
+                    <span>
+                      {checkInValues[item]
+                        ? `${checkInValues[item]}/5`
+                        : "Não registrado"}
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-slate-200">
+                    {checkInValues[item] ? (
                       <div
                         className="progress-grow h-2 rounded-full bg-emerald-500"
-                        style={{ width: "80%" }}
+                        style={{ width: `${checkInValues[item] * 20}%` }}
                       />
-                    </div>
+                    ) : null}
                   </div>
-                ),
-              )}
+                </div>
+              ))}
             </div>
           </div>
         </section>

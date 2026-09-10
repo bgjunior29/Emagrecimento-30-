@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { AppShell } from "../components/Layout";
 import { recipeCatalog } from "../data/mockData";
 
@@ -84,7 +85,11 @@ export default function RecipesPage() {
               key={recipe.id}
               className="reveal-up lift-on-hover rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm"
             >
-              <div className="float-soft mb-4 h-36 rounded-[1.5rem] bg-gradient-to-br from-emerald-100 via-teal-100 to-amber-100" />
+              <Link
+                to={`/app/receitas/${recipe.id}`}
+                className="float-soft mb-4 block h-36 rounded-[1.5rem] bg-gradient-to-br from-emerald-100 via-teal-100 to-amber-100"
+                aria-label={`Abrir receita ${recipe.name}`}
+              />
               <div className="mb-3 flex items-center justify-between">
                 <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold uppercase tracking-[0.12em] text-emerald-700">
                   {recipe.type}
@@ -93,9 +98,12 @@ export default function RecipesPage() {
               </div>
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h4 className="text-xl font-black text-slate-900">
+                  <Link
+                    to={`/app/receitas/${recipe.id}`}
+                    className="text-xl font-black text-slate-900 hover:text-emerald-700"
+                  >
                     {recipe.name}
-                  </h4>
+                  </Link>
                   <p className="mt-1 text-sm text-slate-500">
                     {recipe.calories} kcal
                   </p>
@@ -109,6 +117,12 @@ export default function RecipesPage() {
                   {favorites.includes(recipe.id) ? "★" : "☆"}
                 </button>
               </div>
+              <Link
+                to={`/app/receitas/${recipe.id}`}
+                className="mt-5 inline-flex text-sm font-bold text-emerald-700 hover:text-emerald-600"
+              >
+                Ver receita e preparo
+              </Link>
               <div className="mt-4 flex flex-wrap gap-2">
                 {recipe.tags.map((tag) => (
                   <span

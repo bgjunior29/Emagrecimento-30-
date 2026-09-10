@@ -7,10 +7,10 @@ export default function ProfilePage() {
   const onboarding =
     JSON.parse(localStorage.getItem("em30plus_onboarding") || "null") || {};
   const [form, setForm] = useState({
-    name: savedUser.name || "Ana Silva",
-    goal: onboarding.goal || "Emagrecimento",
-    weight: onboarding.weight || "72",
-    height: onboarding.height || "165",
+    name: savedUser.name || "",
+    goal: onboarding.goal || "",
+    weight: onboarding.weight || "",
+    height: onboarding.height || "",
   });
   const [saved, setSaved] = useState(false);
 
@@ -45,21 +45,24 @@ export default function ProfilePage() {
             <h3 className="mt-4 text-2xl font-black text-slate-900">
               {form.name}
             </h3>
-            <p className="mt-1 text-sm text-slate-500">Meta: Emagrecimento</p>
+            <p className="mt-1 text-sm text-slate-500">
+              Meta: {form.goal || "Ainda não definida"}
+            </p>
           </div>
 
           <div className="mt-6 space-y-3 text-sm text-slate-600">
             <div className="rounded-2xl bg-slate-50 p-3">
-              Objetivo: Emagrecimento
+              Objetivo: {form.goal || "Ainda não definido"}
             </div>
             <div className="rounded-2xl bg-slate-50 p-3">
-              Preferências: Vegetais, frutas, proteínas
+              Preferências:{" "}
+              {onboarding.preferences?.join(", ") || "Ainda não definidas"}
             </div>
             <div className="rounded-2xl bg-slate-50 p-3">
-              Restrições: Sem glúten
+              Restrições: Não informadas
             </div>
             <div className="rounded-2xl bg-slate-50 p-3">
-              Sequência atual: 12 dias
+              Sequência atual: Ainda sem registros
             </div>
           </div>
         </div>

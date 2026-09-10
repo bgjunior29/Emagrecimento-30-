@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppShell } from "../components/Layout";
+import { API_URL } from "../config";
 
 const goals = [
   "Emagrecimento",
@@ -38,13 +39,14 @@ const emptyForm = {
   weight: "",
   goal: "Emagrecimento",
   activity: "Moderadamente ativo",
-  preferences: ["Vegetais", "Frutas"],
+  preferences: [],
 };
 
 export default function OnboardingPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
 
   const handleField = (event) => {
     const { name, value } = event.target;
@@ -63,7 +65,7 @@ export default function OnboardingPage() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const nextErrors = {};
@@ -93,17 +95,47 @@ export default function OnboardingPage() {
       return;
     }
 
-    const user = JSON.parse(
-      localStorage.getItem("em30plus_user") || "null",
-    ) || {
-      name: form.name.trim(),
-      email: "ana@emagrecimento30.com",
-      password: "demo123",
-    };
-    user.name = form.name.trim();
-    localStorage.setItem("em30plus_user", JSON.stringify(user));
-    localStorage.setItem("em30plus_onboarding", JSON.stringify(form));
-    navigate("/app/dashboard");
+    setSaving(true);
+    try {
+      const response = await fetch(`${API_URL}/api/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("em30plus_token")}`,
+        },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          age: Number(form.age),
+          heightCm: Number(form.height),
+          weightKg: Number(form.weight),
+          goal: form.goal,
+          activity: form.activity,
+          preferences: form.preferences,
+        }),
+      });
+      const payload = await response.json();
+      if (!response.ok)
+        throw new Error(payload.error || "Não foi possível salvar seu perfil.");
+
+      const user =
+        JSON.parse(localStorage.getItem("em30plus_user") || "null") || {};
+      localStorage.setItem(
+        "em30plus_user",
+        JSON.stringify({
+          ...user,
+          name: form.name.trim(),
+          profile: payload.user.profile,
+        }),
+      );
+      localStorage.setItem("em30plus_onboarding", JSON.stringify(form));
+      navigate("/app/dashboard");
+    } catch (error) {
+      setErrors({
+        form: error.message || "Não foi possível salvar seu perfil.",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -112,6 +144,11 @@ export default function OnboardingPage() {
         onSubmit={handleSubmit}
         className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_55px_rgba(15,23,42,0.06)] sm:p-8"
       >
+        {errors.form ? (
+          <p className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {errors.form}
+          </p>
+        ) : null}
         <div className="mb-8">
           <p className="text-sm font-bold uppercase tracking-[0.22em] text-emerald-700">
             Perfil inicial
@@ -268,9 +305,10 @@ export default function OnboardingPage() {
         <div className="mt-8 flex justify-end">
           <button
             type="submit"
+            disabled={saving}
             className="rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500"
           >
-            Continuar para o dashboard
+            {saving ? "Salvando seu perfil..." : "Continuar para o dashboard"}
           </button>
         </div>
       </form>

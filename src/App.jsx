@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import MealPlanPage from "./pages/MealPlanPage";
 import CheckInPage from "./pages/CheckInPage";
 import RecipesPage from "./pages/RecipesPage";
+import RecipeDetailPage from "./pages/RecipeDetailPage";
 import ProfilePage from "./pages/ProfilePage";
 import SettingsPage from "./pages/SettingsPage";
 import AdminPage from "./pages/AdminPage";
@@ -99,6 +100,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <RecipesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/app/receitas/:recipeId"
+          element={
+            <ProtectedRoute>
+              <RecipeDetailPage />
             </ProtectedRoute>
           }
         />
