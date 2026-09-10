@@ -163,6 +163,8 @@ const recipe = (name, type, tags, calories, timeMinutes, ingredients) => [
     type === "Café da manhã" || type === "Lanche"
       ? "Misture ou monte os ingredientes até obter uma porção uniforme."
       : "Cozinhe ou grelhe os ingredientes até ficarem completamente preparados.",
+    "Prove e ajuste sal, ervas ou acidez conforme sua preferência.",
+    "Monte a porção no prato e confira se todos os elementos estão bem distribuídos.",
     "Ajuste os temperos e sirva na hora.",
   ],
 ];
@@ -789,6 +791,15 @@ async function main() {
     ingredients,
     steps,
   ] of recipes) {
+    const detailedSteps = [
+      ...steps,
+      ...(steps.length < 5
+        ? [
+            "Separe os utensílios e confira os ingredientes antes de começar.",
+            "Ajuste o tempero e sirva a porção imediatamente.",
+          ].slice(0, 5 - steps.length)
+        : []),
+    ];
     await prisma.recipe.upsert({
       where: { name },
       update: {
@@ -797,10 +808,18 @@ async function main() {
         calories,
         timeMinutes,
         ingredients,
-        steps,
+        steps: detailedSteps,
         active: true,
       },
-      create: { name, type, tags, calories, timeMinutes, ingredients, steps },
+      create: {
+        name,
+        type,
+        tags,
+        calories,
+        timeMinutes,
+        ingredients,
+        steps: detailedSteps,
+      },
     });
   }
 }

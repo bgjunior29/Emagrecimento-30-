@@ -16,6 +16,7 @@ model User {
   updatedAt    DateTime          @updatedAt
   profile      NutritionProfile?
   checkIns     CheckIn[]
+  mealLogs     MealLog[]
   favorites    FavoriteRecipe[]
   mealPlans    MealPlan[]
 }
@@ -29,6 +30,7 @@ model NutritionProfile {
   goal        String
   activity    String
   preferences String[]
+  allergies   String[] @default([])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -75,6 +77,7 @@ model Recipe {
   updatedAt   DateTime         @updatedAt
   favorites   FavoriteRecipe[]
   mealItems   MealPlanItem[]
+  mealLogs    MealLog[]
 
   @@index([type, active])
 }
@@ -103,4 +106,21 @@ model MealPlanItem {
 
   @@unique([mealPlanId, dayIndex, mealType])
   @@index([recipeId])
+}
+
+model MealLog {
+  id        String   @id @default(cuid())
+  userId    String
+  recipeId  Int?
+  date      DateTime
+  mealType  String
+  note      String?
+  completed Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe?  @relation(fields: [recipeId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, date, mealType])
+  @@index([userId, date])
 }

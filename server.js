@@ -129,6 +129,25 @@ function publicMealPlan(plan) {
   };
 }
 
+function normalizeText(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function recipeMatchesAllergies(recipe, allergies = []) {
+  const ingredients = recipe.ingredients.map(normalizeText);
+  return !allergies.some((allergy) => {
+    const normalizedAllergy = normalizeText(allergy);
+    return (
+      normalizedAllergy &&
+      ingredients.some((ingredient) => ingredient.includes(normalizedAllergy))
+    );
+  });
+}
+
 function validateRecipeInput(body) {
   const { name, type, tags, calories, timeMinutes, ingredients, steps } = body;
   if (
@@ -283,8 +302,16 @@ app.get("/api/me", auth, async (req, res) => {
 });
 
 app.put("/api/profile", auth, async (req, res) => {
-  const { name, age, heightCm, weightKg, goal, activity, preferences } =
-    req.body;
+  const {
+    name,
+    age,
+    heightCm,
+    weightKg,
+    goal,
+    activity,
+    preferences,
+    allergies,
+  } = req.body;
 
   if (
     !name?.trim() ||
@@ -293,7 +320,8 @@ app.put("/api/profile", auth, async (req, res) => {
     !Number(weightKg) ||
     !goal ||
     !activity ||
-    !Array.isArray(preferences)
+    !Array.isArray(preferences) ||
+    !Array.isArray(allergies)
   ) {
     return res
       .status(400)
@@ -313,6 +341,7 @@ app.put("/api/profile", auth, async (req, res) => {
             goal,
             activity,
             preferences,
+            allergies,
           },
           update: {
             age: Number(age),
@@ -321,6 +350,7 @@ app.put("/api/profile", auth, async (req, res) => {
             goal,
             activity,
             preferences,
+            allergies,
           },
         },
       },
@@ -367,27 +397,107 @@ app.get("/api/check-ins", auth, async (req, res) => {
   return res.json({ checkIns });
 });
 
+app.get("/api/meal-logs", auth, async (req, res) => {
+  const from = req.query.from
+    ? new Date(req.query.from)
+    : new Date(Date.now() - 7 * 86400000);
+  const to = req.query.to ? new Date(req.query.to) : new Date();
+  const logs = await prisma.mealLog.findMany({
+    where: { userId: req.userId, date: { gte: from, lte: to } },
+    include: { recipe: true },
+    orderBy: [{ date: "asc" }, { mealType: "asc" }],
+  });
+  return res.json({
+    mealLogs: logs.map((log) => ({
+      ...log,
+      recipe: log.recipe ? publicRecipe(log.recipe) : null,
+    })),
+  });
+});
+
+app.put("/api/meal-logs", auth, async (req, res) => {
+  const { date, mealType, recipeId, completed, note } = req.body;
+  const parsedDate = new Date(date);
+  if (
+    Number.isNaN(parsedDate.getTime()) ||
+    !["breakfast", "lunch", "dinner", "snack"].includes(mealType)
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Data ou tipo de refeicao invalido." });
+  }
+  const recipe = recipeId
+    ? await prisma.recipe.findFirst({
+        where: { id: Number(recipeId), active: true },
+      })
+    : null;
+  if (recipeId && !recipe)
+    return res.status(404).json({ error: "Receita nao encontrada." });
+  const profile = await prisma.nutritionProfile.findUnique({
+    where: { userId: req.userId },
+  });
+  if (recipe && !recipeMatchesAllergies(recipe, profile?.allergies))
+    return res
+      .status(422)
+      .json({ error: "Essa receita conflita com uma alergia cadastrada." });
+  const log = await prisma.mealLog.upsert({
+    where: {
+      userId_date_mealType: { userId: req.userId, date: parsedDate, mealType },
+    },
+    update: {
+      recipeId: recipe?.id || null,
+      completed: completed !== false,
+      note: note?.trim() || null,
+    },
+    create: {
+      userId: req.userId,
+      date: parsedDate,
+      mealType,
+      recipeId: recipe?.id || null,
+      completed: completed !== false,
+      note: note?.trim() || null,
+    },
+    include: { recipe: true },
+  });
+  return res.json({
+    mealLog: { ...log, recipe: log.recipe ? publicRecipe(log.recipe) : null },
+  });
+});
+
 app.get("/api/recipes", auth, async (req, res) => {
+  const profile = await prisma.nutritionProfile.findUnique({
+    where: { userId: req.userId },
+  });
   const recipes = await prisma.recipe.findMany({
     where: { active: true },
     orderBy: [{ type: "asc" }, { name: "asc" }],
   });
+  const safeRecipes = recipes.filter((recipe) =>
+    recipeMatchesAllergies(recipe, profile?.allergies),
+  );
   const favorites = await prisma.favoriteRecipe.findMany({
     where: { userId: req.userId },
     select: { recipeId: true },
   });
   return res.json({
-    recipes: recipes.map(publicRecipe),
+    recipes: safeRecipes.map(publicRecipe),
     favoriteIds: favorites.map((favorite) => favorite.recipeId),
   });
 });
 
 app.get("/api/recipes/:recipeId", auth, async (req, res) => {
+  const profile = await prisma.nutritionProfile.findUnique({
+    where: { userId: req.userId },
+  });
   const recipe = await prisma.recipe.findFirst({
     where: { id: Number(req.params.recipeId), active: true },
   });
   if (!recipe)
     return res.status(404).json({ error: "Receita nao encontrada." });
+  if (!recipeMatchesAllergies(recipe, profile?.allergies))
+    return res.status(404).json({
+      error: "Receita indisponivel para as alergias cadastradas.",
+    });
   return res.json({ recipe: publicRecipe(recipe) });
 });
 
@@ -465,6 +575,9 @@ app.delete(
 );
 
 app.get("/api/meal-plans/current", auth, async (req, res) => {
+  const profile = await prisma.nutritionProfile.findUnique({
+    where: { userId: req.userId },
+  });
   const plan = await prisma.mealPlan.findUnique({
     where: {
       userId_weekStart: { userId: req.userId, weekStart: getWeekStart() },
@@ -476,22 +589,29 @@ app.get("/api/meal-plans/current", auth, async (req, res) => {
       },
     },
   });
+  if (plan)
+    plan.items = plan.items.filter((item) =>
+      recipeMatchesAllergies(item.recipe, profile?.allergies),
+    );
   return res.json({ plan: plan ? publicMealPlan(plan) : null });
 });
 
 app.post("/api/meal-plans/generate", auth, async (req, res) => {
-  const recipes = await prisma.recipe.findMany({ where: { active: true } });
+  const profile = await prisma.nutritionProfile.findUnique({
+    where: { userId: req.userId },
+  });
+  const recipes = (
+    await prisma.recipe.findMany({ where: { active: true } })
+  ).filter((recipe) => recipeMatchesAllergies(recipe, profile?.allergies));
   const byType = {
     breakfast: recipes.filter((recipe) => recipe.type === "Café da manhã"),
     lunch: recipes.filter((recipe) => recipe.type === "Almoço"),
     dinner: recipes.filter((recipe) => recipe.type === "Jantar"),
   };
   if (Object.values(byType).some((items) => items.length === 0)) {
-    return res
-      .status(409)
-      .json({
-        error: "O catalogo ainda nao possui receitas para todos os horarios.",
-      });
+    return res.status(409).json({
+      error: "O catalogo ainda nao possui receitas para todos os horarios.",
+    });
   }
   const mealTypes = ["breakfast", "lunch", "dinner"];
   const weekStart = getWeekStart();
@@ -559,6 +679,13 @@ app.put(
       return res
         .status(404)
         .json({ error: "Plano ou receita nao encontrados." });
+    const profile = await prisma.nutritionProfile.findUnique({
+      where: { userId: req.userId },
+    });
+    if (!recipeMatchesAllergies(recipe, profile?.allergies))
+      return res
+        .status(422)
+        .json({ error: "Essa receita conflita com uma alergia cadastrada." });
     const item = await prisma.mealPlanItem.upsert({
       where: {
         mealPlanId_dayIndex_mealType: {

@@ -32,6 +32,17 @@ const basics = [
   "Laticínios",
 ];
 
+const commonAllergies = [
+  "Leite",
+  "Ovo",
+  "Amendoim",
+  "Castanhas",
+  "Peixe",
+  "Frutos do mar",
+  "Soja",
+  "Glúten",
+];
+
 const emptyForm = {
   name: "",
   age: "",
@@ -40,6 +51,7 @@ const emptyForm = {
   goal: "Emagrecimento",
   activity: "Moderadamente ativo",
   preferences: [],
+  allergies: [],
 };
 
 export default function OnboardingPage() {
@@ -47,6 +59,7 @@ export default function OnboardingPage() {
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const [allergyInput, setAllergyInput] = useState("");
 
   const handleField = (event) => {
     const { name, value } = event.target;
@@ -63,6 +76,27 @@ export default function OnboardingPage() {
 
       return { ...current, preferences };
     });
+  };
+
+  const toggleAllergy = (item) => {
+    setForm((current) => ({
+      ...current,
+      allergies: current.allergies.includes(item)
+        ? current.allergies.filter((value) => value !== item)
+        : [...current.allergies, item],
+    }));
+  };
+
+  const addAllergy = () => {
+    const value = allergyInput.trim();
+    if (!value) return;
+    setForm((current) => ({
+      ...current,
+      allergies: current.allergies.includes(value)
+        ? current.allergies
+        : [...current.allergies, value],
+    }));
+    setAllergyInput("");
   };
 
   const handleSubmit = async (event) => {
@@ -111,6 +145,7 @@ export default function OnboardingPage() {
           goal: form.goal,
           activity: form.activity,
           preferences: form.preferences,
+          allergies: form.allergies,
         }),
       });
       const payload = await response.json();
@@ -299,6 +334,54 @@ export default function OnboardingPage() {
           </div>
           {errors.preferences ? (
             <p className="mt-2 text-xs text-red-600">{errors.preferences}</p>
+          ) : null}
+        </div>
+
+        <div className="mt-8 rounded-[1.5rem] border border-amber-200 bg-amber-50 p-5">
+          <h3 className="text-lg font-bold text-slate-900">
+            Alergias e alimentos a evitar
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-slate-600">
+            As receitas incompatíveis serão filtradas automaticamente do seu
+            catálogo e do cardápio.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            {commonAllergies.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => toggleAllergy(item)}
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition ${form.allergies.includes(item) ? "border-amber-400 bg-amber-100 text-amber-900" : "border-slate-200 bg-white text-slate-700 hover:border-amber-300"}`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+            <input
+              value={allergyInput}
+              onChange={(event) => setAllergyInput(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  addAllergy();
+                }
+              }}
+              placeholder="Outra alergia ou ingrediente"
+              className="min-w-0 flex-1 rounded-2xl border border-amber-200 bg-white px-4 py-3 text-sm outline-none focus:border-amber-400"
+            />
+            <button
+              type="button"
+              onClick={addAllergy}
+              className="rounded-full bg-amber-500 px-5 py-3 text-sm font-bold text-white"
+            >
+              Adicionar
+            </button>
+          </div>
+          {form.allergies.length ? (
+            <p className="mt-3 text-sm font-semibold text-amber-900">
+              A evitar: {form.allergies.join(", ")}
+            </p>
           ) : null}
         </div>
 
