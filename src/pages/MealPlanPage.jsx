@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppShell } from "../components/Layout";
-import { recipeCatalog } from "../data/mockData";
+import { API_URL } from "../config";
 
 const mealLabels = {
   breakfast: "Café da manhã",
@@ -8,78 +8,98 @@ const mealLabels = {
   dinner: "Jantar",
 };
 
-function getInitialPlan() {
-  if (typeof window === "undefined") return [];
-
-  try {
-    const saved = JSON.parse(
-      localStorage.getItem("em30plus_meal_plan") || "null",
-    );
-    return saved || [];
-  } catch {
-    return [];
-  }
-}
-
 export default function MealPlanPage() {
-  const [plan, setPlan] = useState(getInitialPlan);
+  const [plan, setPlan] = useState(null);
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const dayNames = [
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+    "Domingo",
+  ];
+  const token = localStorage.getItem("em30plus_token");
 
   const getAlternatives = (mealType) =>
-    recipeCatalog.filter((item) => item.type === mealLabels[mealType]);
+    recipes.filter((item) => item.type === mealLabels[mealType]);
 
-  const swapMeal = (dayIndex, mealType) => {
+  const readPlan = (payload) =>
+    payload
+      ? payload.days.map((day, dayIndex) => ({
+          day: dayNames[dayIndex],
+          dayIndex,
+          meals: day.meals,
+        }))
+      : [];
+
+  useEffect(() => {
+    Promise.all([
+      fetch(`${API_URL}/api/meal-plans/current`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+      fetch(`${API_URL}/api/recipes`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    ])
+      .then(async ([planResponse, recipeResponse]) => {
+        const planPayload = await planResponse.json();
+        const recipePayload = await recipeResponse.json();
+        if (!planResponse.ok || !recipeResponse.ok)
+          throw new Error(
+            planPayload.error ||
+              recipePayload.error ||
+              "Não foi possível carregar o cardápio.",
+          );
+        setPlan(readPlan(planPayload.plan));
+        setRecipes(recipePayload.recipes || []);
+      })
+      .catch((requestError) => setError(requestError.message))
+      .finally(() => setLoading(false));
+  }, [token]);
+
+  const swapMeal = async (dayIndex, mealType) => {
     const alternatives = getAlternatives(mealType);
     const currentValue = plan[dayIndex].meals[mealType];
     const currentIndex = alternatives.findIndex(
-      (item) => item.name === currentValue,
+      (item) => item.id === currentValue.id,
     );
-    const nextValue =
-      alternatives[(currentIndex + 1) % alternatives.length].name;
-
-    const updatedPlan = plan.map((day, index) => {
-      if (index !== dayIndex) return day;
-
-      return {
-        ...day,
-        meals: { ...day.meals, [mealType]: nextValue },
-      };
-    });
-
-    setPlan(updatedPlan);
-    localStorage.setItem("em30plus_meal_plan", JSON.stringify(updatedPlan));
+    const nextValue = alternatives[(currentIndex + 1) % alternatives.length];
+    const response = await fetch(
+      `${API_URL}/api/meal-plans/current/items/${dayIndex}/${mealType}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ recipeId: nextValue.id }),
+      },
+    );
+    if (!response.ok) return;
+    setPlan((current) =>
+      current.map((day, index) =>
+        index === dayIndex
+          ? { ...day, meals: { ...day.meals, [mealType]: nextValue } }
+          : day,
+      ),
+    );
   };
 
-  const regeneratePlan = () => {
-    const dayNames = [
-      "Domingo",
-      "Segunda",
-      "Terça",
-      "Quarta",
-      "Quinta",
-      "Sexta",
-      "Sábado",
-    ];
-    const today = new Date().getDay();
-    const randomized = Array.from({ length: 7 }, (_, index) => ({
-      day: dayNames[(today + index) % dayNames.length],
-      meals: {
-        breakfast:
-          getAlternatives("breakfast")[
-            Math.floor(Math.random() * getAlternatives("breakfast").length)
-          ].name,
-        lunch:
-          getAlternatives("lunch")[
-            Math.floor(Math.random() * getAlternatives("lunch").length)
-          ].name,
-        dinner:
-          getAlternatives("dinner")[
-            Math.floor(Math.random() * getAlternatives("dinner").length)
-          ].name,
-      },
-    }));
-
-    setPlan(randomized);
-    localStorage.setItem("em30plus_meal_plan", JSON.stringify(randomized));
+  const regeneratePlan = async () => {
+    setSaving(true);
+    const response = await fetch(`${API_URL}/api/meal-plans/generate`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const payload = await response.json();
+    if (response.ok) setPlan(readPlan(payload.plan));
+    else setError(payload.error || "Não foi possível gerar o cardápio.");
+    setSaving(false);
   };
 
   return (
@@ -97,13 +117,24 @@ export default function MealPlanPage() {
           <button
             type="button"
             onClick={regeneratePlan}
+            disabled={saving || loading}
             className="rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500"
           >
-            Gerar novo cardápio
+            {saving ? "Gerando..." : "Gerar novo cardápio"}
           </button>
         </div>
 
-        {plan.length === 0 ? (
+        {error ? (
+          <p className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+            {error}
+          </p>
+        ) : null}
+        {loading ? (
+          <p className="rounded-2xl bg-white p-6 text-center text-sm text-slate-500">
+            Carregando seu cardápio...
+          </p>
+        ) : null}
+        {!loading && plan?.length === 0 ? (
           <div className="rounded-[2rem] border border-dashed border-emerald-300 bg-emerald-50 p-8 text-center">
             <h3 className="text-xl font-black text-slate-900">
               Seu cardápio começa com você
@@ -116,7 +147,7 @@ export default function MealPlanPage() {
         ) : null}
 
         <div className="grid gap-5 xl:grid-cols-2">
-          {plan.map((day, dayIndex) => (
+          {plan?.map((day, dayIndex) => (
             <div
               key={day.day}
               className="reveal-up lift-on-hover rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm"
@@ -143,7 +174,12 @@ export default function MealPlanPage() {
                         Trocar
                       </button>
                     </div>
-                    {mealName}
+                    <a
+                      href={`/app/receitas/${mealName.id}`}
+                      className="font-medium text-emerald-700 hover:underline"
+                    >
+                      {mealName.name}
+                    </a>
                   </div>
                 ))}
               </div>

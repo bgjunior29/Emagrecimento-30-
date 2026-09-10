@@ -49,6 +49,41 @@ npm run dev:server
 
 O endpoint `GET /api/health` confirma se a API consegue acessar o banco.
 
+### Dados reais de receitas e cardápios
+
+O catálogo de receitas, favoritos e cardápios semanais fica no PostgreSQL. O
+arquivo `prisma/seed.js` contém apenas a carga inicial do catálogo; depois do
+seed, o painel administrativo passa a ser a fonte de manutenção das receitas.
+
+No Render, o `render.yaml` executa automaticamente:
+
+```bash
+npm run db:push
+npm run db:seed
+```
+
+Para preparar um banco local, configure `DATABASE_URL` no `.env` e execute:
+
+```bash
+npm run db:push
+npm run db:seed
+```
+
+Principais endpoints autenticados:
+
+- `GET /api/recipes` lista receitas ativas e favoritos do usuário.
+- `GET /api/recipes/:id` abre ingredientes e modo de preparo.
+- `PUT /api/favorites/:id` alterna o favorito no PostgreSQL.
+- `GET /api/meal-plans/current` carrega o cardápio da semana atual.
+- `POST /api/meal-plans/generate` gera o primeiro cardápio da semana.
+- `PUT /api/meal-plans/current/items/:dayIndex/:mealType` troca uma refeição.
+
+Endpoints administrativos exigem token com role `admin`:
+
+- `POST /api/admin/recipes` cadastra uma receita.
+- `PUT /api/admin/recipes/:id` edita uma receita.
+- `DELETE /api/admin/recipes/:id` arquiva uma receita sem apagar histórico.
+
 No primeiro deploy do Render, o `render.yaml` usa `prisma db push` para criar as tabelas diretamente no PostgreSQL informado. Depois de conectar o banco, gere a migration inicial localmente com `npm run db:migrate:dev -- --name init` e passe o build para `npm run db:migrate`.
 
 ## Scripts disponíveis

@@ -2,7 +2,7 @@ services:
   - type: web
     name: emagrecimento-30-api
     runtime: node
-    buildCommand: npm install && npm run build && npm run db:push
+    buildCommand: npm install && npm run build && npm run db:push && npm run db:seed
     startCommand: npm start
     envVars:
       - key: DATABASE_URL

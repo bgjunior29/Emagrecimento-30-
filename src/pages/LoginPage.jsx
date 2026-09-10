@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL, CHECKOUT_URL } from "../config";
-import { demoCredentials } from "../data/mockData";
+import { demoCredentials } from "../data/demoCredentials";
 
 export default function LoginPage() {
   const navigate = useNavigate();

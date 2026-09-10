@@ -1,18 +1,35 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AppShell } from "../components/Layout";
-import { recipeCatalog, recipeDetails } from "../data/mockData";
+import { API_URL } from "../config";
 
 export default function RecipeDetailPage() {
   const { recipeId } = useParams();
-  const recipe = recipeCatalog.find((item) => item.id === Number(recipeId));
-  const detail = recipe ? recipeDetails[recipe.id] : null;
+  const [recipe, setRecipe] = useState(null);
+  const [error, setError] = useState("");
 
-  if (!recipe || !detail) {
+  useEffect(() => {
+    fetch(`${API_URL}/api/recipes/${recipeId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("em30plus_token")}`,
+      },
+    })
+      .then(async (response) => {
+        const payload = await response.json();
+        if (!response.ok)
+          throw new Error(payload.error || "Receita não encontrada.");
+        setRecipe(payload.recipe);
+      })
+      .catch((requestError) => setError(requestError.message));
+  }, [recipeId]);
+  const detail = recipe;
+
+  if (error || !recipe || !detail) {
     return (
       <AppShell pageTitle="Receita não encontrada">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
           <p className="text-sm text-slate-600">
-            Essa receita não está disponível no catálogo.
+            {error || "Carregando receita..."}
           </p>
           <Link
             to="/app/receitas"

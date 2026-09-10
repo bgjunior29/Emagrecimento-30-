@@ -1,18 +1,15 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { AppShell } from "../components/Layout";
-import { recipeCatalog } from "../data/mockData";
+import { API_URL } from "../config";
 
 export default function RecipesPage() {
   const [filter, setFilter] = useState("Todas");
   const [query, setQuery] = useState("");
-  const [favorites, setFavorites] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("em30plus_favorites") || "[]");
-    } catch {
-      return [];
-    }
-  });
+  const [recipes, setRecipes] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const filters = [
     "Todas",
     "Café da manhã",
@@ -22,9 +19,28 @@ export default function RecipesPage() {
     "Vegetariano",
     "Rápido",
   ];
-  const recipes = useMemo(
+  useEffect(() => {
+    fetch(`${API_URL}/api/recipes`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("em30plus_token")}`,
+      },
+    })
+      .then(async (response) => {
+        const payload = await response.json();
+        if (!response.ok)
+          throw new Error(
+            payload.error || "Não foi possível carregar as receitas.",
+          );
+        setRecipes(payload.recipes);
+        setFavorites(payload.favoriteIds || []);
+      })
+      .catch((requestError) => setError(requestError.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filteredRecipes = useMemo(
     () =>
-      recipeCatalog.filter((recipe) => {
+      recipes.filter((recipe) => {
         const matchesFilter =
           filter === "Todas" ||
           recipe.type === filter ||
@@ -34,15 +50,24 @@ export default function RecipesPage() {
           recipe.name.toLowerCase().includes(query.toLowerCase())
         );
       }),
-    [filter, query],
+    [filter, query, recipes],
   );
 
-  const toggleFavorite = (id) => {
-    const next = favorites.includes(id)
-      ? favorites.filter((item) => item !== id)
-      : [...favorites, id];
-    setFavorites(next);
-    localStorage.setItem("em30plus_favorites", JSON.stringify(next));
+  const toggleFavorite = async (id) => {
+    const response = await fetch(`${API_URL}/api/favorites/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("em30plus_token")}`,
+      },
+    });
+    const payload = await response.json();
+    if (response.ok) {
+      setFavorites((current) =>
+        payload.favorite
+          ? [...current, id]
+          : current.filter((item) => item !== id),
+      );
+    }
   };
 
   return (
@@ -79,8 +104,18 @@ export default function RecipesPage() {
           </div>
         </div>
 
+        {loading ? (
+          <p className="rounded-2xl bg-white p-6 text-center text-sm text-slate-500">
+            Carregando receitas...
+          </p>
+        ) : null}
+        {error ? (
+          <p className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700">
+            {error}
+          </p>
+        ) : null}
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {recipes.map((recipe) => (
+          {filteredRecipes.map((recipe) => (
             <div
               key={recipe.id}
               className="reveal-up lift-on-hover rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm"
@@ -136,7 +171,7 @@ export default function RecipesPage() {
             </div>
           ))}
         </div>
-        {recipes.length === 0 ? (
+        {!loading && !error && filteredRecipes.length === 0 ? (
           <p className="rounded-2xl bg-white p-6 text-center text-sm text-slate-500">
             Nenhuma receita encontrada.
           </p>

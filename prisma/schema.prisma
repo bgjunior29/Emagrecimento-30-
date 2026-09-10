@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(cuid())
+  id           String            @id @default(cuid())
   name         String
-  email        String         @unique
+  email        String            @unique
   passwordHash String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
   profile      NutritionProfile?
   checkIns     CheckIn[]
   favorites    FavoriteRecipe[]
+  mealPlans    MealPlan[]
 }
 
 model NutritionProfile {
@@ -55,6 +56,51 @@ model FavoriteRecipe {
   recipeId  Int
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, recipeId])
+}
+
+model Recipe {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
+  type        String
+  tags        String[]
+  calories    Int
+  timeMinutes Int
+  ingredients String[]
+  steps       String[]
+  active      Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  favorites   FavoriteRecipe[]
+  mealItems   MealPlanItem[]
+
+  @@index([type, active])
+}
+
+model MealPlan {
+  id        String         @id @default(cuid())
+  userId    String
+  weekStart DateTime
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     MealPlanItem[]
+
+  @@unique([userId, weekStart])
+  @@index([userId, weekStart])
+}
+
+model MealPlanItem {
+  id         String   @id @default(cuid())
+  mealPlanId String
+  dayIndex   Int
+  mealType   String
+  recipeId   Int
+  mealPlan   MealPlan @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
+  recipe     Recipe   @relation(fields: [recipeId], references: [id], onDelete: Restrict)
+
+  @@unique([mealPlanId, dayIndex, mealType])
+  @@index([recipeId])
 }
