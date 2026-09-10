@@ -22,10 +22,9 @@ export function AppShell({ children, pageTitle }) {
   const navItems = [
     ["Dashboard", "/app/dashboard"],
     ["Cardápio", "/app/cardapio"],
-    ["Compras", "/app/compras"],
     ["Check-in", "/app/checkin"],
     ["Receitas", "/app/receitas"],
-    ["Perfil", "/app/perfil"],
+    ...(user.role !== "admin" ? [["Perfil", "/app/perfil"]] : []),
     ...(user.role === "admin" ? [["Admin", "/app/admin"]] : []),
   ];
 

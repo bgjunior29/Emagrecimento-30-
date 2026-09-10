@@ -123,6 +123,8 @@ app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
   const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
   const adminPassword = process.env.ADMIN_PASSWORD;
+  const demoEmail = "ana@emagrecimento30.com";
+  const demoPassword = "demo123";
 
   if (
     adminEmail &&
@@ -137,6 +139,18 @@ app.post("/api/auth/login", async (req, res) => {
         name: "Administrador",
         email: adminEmail,
         role: "admin",
+      },
+    });
+  }
+
+  if (email?.toLowerCase() === demoEmail && password === demoPassword) {
+    return res.json({
+      token: createToken("demo-user"),
+      user: {
+        id: "demo-user",
+        name: "Ana",
+        email: demoEmail,
+        role: "user",
       },
     });
   }

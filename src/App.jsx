@@ -5,7 +5,6 @@ import LoginPage from "./pages/LoginPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import DashboardPage from "./pages/DashboardPage";
 import MealPlanPage from "./pages/MealPlanPage";
-import ShoppingListPage from "./pages/ShoppingListPage";
 import CheckInPage from "./pages/CheckInPage";
 import RecipesPage from "./pages/RecipesPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -33,6 +32,15 @@ function AdminRoute({ children }) {
     children
   ) : (
     <Navigate to="/admin-login" replace />
+  );
+}
+
+function UserRoute({ children }) {
+  const user = JSON.parse(localStorage.getItem("em30plus_user") || "null");
+  return user?.role === "admin" ? (
+    <Navigate to="/app/admin" replace />
+  ) : (
+    children
   );
 }
 
@@ -79,14 +87,6 @@ export default function App() {
           }
         />
         <Route
-          path="/app/compras"
-          element={
-            <ProtectedRoute>
-              <ShoppingListPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/app/checkin"
           element={
             <ProtectedRoute>
@@ -105,9 +105,11 @@ export default function App() {
         <Route
           path="/app/perfil"
           element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
+            <UserRoute>
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            </UserRoute>
           }
         />
         <Route
@@ -134,10 +136,6 @@ export default function App() {
         <Route
           path="/cardapio"
           element={<Navigate to="/app/cardapio" replace />}
-        />
-        <Route
-          path="/compras"
-          element={<Navigate to="/app/compras" replace />}
         />
         <Route
           path="/checkin"

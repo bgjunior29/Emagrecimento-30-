@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL, CHECKOUT_URL } from "../config";
+import { demoCredentials } from "../data/mockData";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -143,6 +144,12 @@ export default function LoginPage() {
           <p className="text-center text-xs text-slate-500">
             Use o e-mail e a senha recebidos após a compra.
           </p>
+
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-900">
+            <p className="font-bold">Acesso de demonstração</p>
+            <p className="mt-1">E-mail: {demoCredentials.email}</p>
+            <p>Senha: {demoCredentials.password}</p>
+          </div>
         </form>
 
         <div className="mt-6 text-center text-sm text-slate-600">

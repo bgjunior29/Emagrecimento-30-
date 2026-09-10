@@ -4,7 +4,6 @@ import { AppShell } from "../components/Layout";
 const quickActions = [
   { label: "Ver cardápio", to: "/app/cardapio" },
   { label: "Registrar refeição", to: "/app/checkin" },
-  { label: "Lista de compras", to: "/app/compras" },
   { label: "Receitas", to: "/app/receitas" },
 ];
 
