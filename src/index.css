@@ -23,6 +23,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background: #fcfaf6;
+  overflow-x: hidden;
   animation: fadeIn 0.45s ease;
 }
 
@@ -43,6 +44,19 @@ img {
 
 button {
   transition: all 180ms ease;
+}
+
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 /* Compatibilidade visual para telas legadas que ainda usam tokens slate/emerald. */

@@ -41,12 +41,14 @@ export function AppShell({ children, pageTitle }) {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <Link
             to="/app/dashboard"
-            className="flex items-center gap-2 text-lg font-black text-[#3f342c]"
+            className="flex min-w-0 items-center gap-2 text-lg font-black text-[#3f342c]"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#d6a14a] text-sm font-black text-[#3f342c] shadow-sm">
               30+
             </span>
-            Emagrecimento 30+
+            <span className="truncate sm:whitespace-nowrap">
+              Emagrecimento 30+
+            </span>
           </Link>
 
           <nav className="hidden items-center gap-1 rounded-full border border-[#e8dfd2] bg-[#f6f0e7] p-1 text-sm font-bold text-[#685748] md:flex">
@@ -61,7 +63,7 @@ export function AppShell({ children, pageTitle }) {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="shrink-0 flex items-center gap-2">
             <div className="hidden rounded-full border border-[#e8dfd2] bg-[#f6f0e7] px-3 py-2 text-xs font-bold text-[#685748] sm:block">
               {user.name}
             </div>
